@@ -1,8 +1,9 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.views import View
 
-from SpeedKartApp.models import LoginTable_model
+from .forms import *
+from SpeedKartApp.models import *
 
 # Create your views here.
 class Login(View):
@@ -33,11 +34,17 @@ class Login(View):
     
 class ViewCategory(View):
     def get(self, request):
-        return render(request, 'Admin/Add&ViewCategory.html')
+        c=Category_Table.objects.all()
+        return render(request, 'Admin/Add&ViewCategory.html', {'s':c})
     
 class NewCategory(View):
     def get(self, request):
         return render(request, 'Admin/AddNewCategory.html')
+    def post(self, request):
+        c=NewCategory_form(request.POST)
+        if c.is_valid():
+            c.save()
+            return redirect('Add_ViewCategory')
     
 class Dashboard(View):
     def get(self, request):

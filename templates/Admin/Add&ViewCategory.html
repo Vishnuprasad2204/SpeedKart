@@ -5,33 +5,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verify Shop</title>
+    <title>Category</title>
     <link rel="stylesheet" href="{% static 'style.css'  %}">
 </head>
 <body class="test">
-
+    <div class="icon">
+    <a href="/Add_NewCategory">+</a></div>
     <table>
+        <tr>
+            <th>id</th>
         <th>Catagory</th>
         <th>Description</th>
-        <th>phone</th>
         <th>Date</th>
         <th></th>
+    </tr>
+{% for i in s %}
     <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{{i.id}}</td>
+            <td>{{i.Category_name}}</td>
+            <td>{{i.Description}}</td>
+            <td>{{i.created_at}}</td>
             <td>
                 <a href="#">Delete Catagory</a><br></td>
     </tr>
-    <tr>
-        <td></td>
-        <td></td>
-        <td><a href="http://127.0.0.1:5500/admin/AddNewCategory.html">+</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-       
+    
+   
+       {% endfor %}
+    
     </table>
 </body>
 </html>
