@@ -1,0 +1,24 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'style.css'  %}">
+</head>
+<body>
+    <div class="test"><form action="" class="regcard" >
+        <h2>Reply</h2>
+        <p>Assign Delivery agent:</p>
+        <select id="reply" name="Assign delivery agent">
+            <option value="1">Option 1</option>
+            <option value="2">Option 2</option>
+            <option value="3">Option 3</option>
+        </select>
+        <input type="textarea" placeholder="Description"><br>
+        <button type="submit">Assign</button><br>
+        </div>
+</body>
+</html>

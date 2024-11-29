@@ -1,0 +1,24 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Now!</title>
+    <link rel="stylesheet" href="{% static 'style.css'  %}">
+
+</head>
+<body>
+  <div class="test">
+    <form action="" method="post" class="logcard">
+      {% csrf_token %}
+    <h1>Welcome Back!</h1>
+    <input type="text" placeholder="Username" name="username"><br>
+    <input type="password" placeholder="Password" name="password"><br>
+    <p>Don't Have An Account?<a href="http://127.0.0.1:5500/registration.html">Register Now!</a></p><br>
+    <h4><a href="">Forgot password</a></h4><br>
+    <button type="submit">LOGIN</button><br>
+  </form></div>
+</body>
+</html>
