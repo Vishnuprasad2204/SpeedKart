@@ -7,3 +7,7 @@ class NewCategory_form(ModelForm):
     class Meta:
         model = Category_Table
         fields = ('Category_name','Description')
+
+#class Registration_form(ModelForm):
+ #  class Meta:
+  #     model = 

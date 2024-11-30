@@ -28,7 +28,12 @@ class Login(View):
         else:
             return HttpResponse('''<script> alert('Invalid Credentials');window.location="/login" </script>''')
 
+    #//////////////////////////////////REGISTRATION///////////////////////////////
 
+class Registration(View):
+    def get(self, request):
+        return render(request, 'Registration.html')
+    
     
     # ///////////////////////////////////// ADMIN/////////////////////////////////////
     
@@ -66,10 +71,6 @@ class VerifyShop(View):
     def get(self, request):
         return render(request, 'Admin/Verify_shop.html')
 
-class ViewApRjDelAgent(View):
-    def get(self, request):
-        return render(request, 'Admin/ViewApproved&RejectedDeliveryAgent.html')
-
 class CompAndSentReplay(View):
     def get(self, request):
         return render(request, 'Admin/ViewComplaints&sentReplay.html')
@@ -94,13 +95,13 @@ class DeliveryDashBoard(View):
     def get(self, request):
         return render(request, 'Delivery boy/DeliveryBoyDashBoard.html')
 
-class DeliveryReg(View):
-    def get(self, request):
-        return render(request, 'Delivery boy/DeliveryBoyRegistration.html')
-
 class DeliveryViewComp(View):
     def get(self, request):
         return render(request, 'Delivery boy/DeliveryBoySentComplaint&ViewReplay.html')
+
+class DeliveryReviewRating(View):
+    def get(self, request):
+        return render(request, 'Delivery boy/DeliveryBoyReviewRating.html')
     
 class DeliveryNotification(View):
     def get(self, request):
@@ -145,9 +146,6 @@ class SellerNewPassword(View):
     def get(self, request):
         return render(request, 'seller/newpassword_seller.html')
     
-class SellerRegistration(View):
-    def get(self, request):
-        return render(request, 'seller/registration_seller.html')
 
 class SellerReview(View):
     def get(self, request):
@@ -183,10 +181,6 @@ class TailorDesign(View):
 class TailorProfile(View):
     def get(self, request):
         return render(request, 'Tailor/Manage_profile.html')
-       
-class TailorReg(View):
-    def get(self, request):
-        return render(request, 'Tailor/Registration.html')
         
 class TailorDashboard(View):
     def get(self, request):

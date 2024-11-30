@@ -15,8 +15,8 @@ class UserTable_model(models.Model):
 
 class ShopTable_model(models.Model):
     LOGIN_ID = models.ForeignKey(LoginTable_model, on_delete=models.CASCADE, null=True, blank=True)
-    Shop_name = models.CharField(max_length=100, null=True, blank=True)
-    Shop_address = models.CharField(max_length=200, null=True, blank=True)
+    Name = models.CharField(max_length=100, null=True, blank=True)
+    Address = models.CharField(max_length=200, null=True, blank=True)
     Phone_no = models.IntegerField(null= True, blank= True)
     Email = models.CharField(max_length= 100, null= True ,blank= True)
 
@@ -38,11 +38,8 @@ class Delivery_Agent_Table(models.Model):
     LOGIN_ID = models.ForeignKey(LoginTable_model, on_delete=models.CASCADE, null=True, blank=True)
     Name = models.CharField(max_length=100, null=True, blank=True)
     Address = models.CharField(max_length=200, null=True, blank=True)
-    Email = models.CharField(max_length=100, null=True, blank=True)
     Phone_no = models.IntegerField(null= True, blank= True)
-    Gender = models.CharField(max_length= 10, null= True, blank= True)
-    DOB = models.CharField(max_length= 10, null= True, blank= True)
-
+    Email = models.CharField(max_length=100, null=True, blank=True)
 class Category_Table(models.Model):
     Category_name = models.CharField(max_length= 100, null= True, blank= True)
     Description =  models.CharField(max_length= 100, null= True, blank= True)
@@ -51,8 +48,9 @@ class Category_Table(models.Model):
 
 class Seller_Table(models.Model):
     LOGIN_ID = models.ForeignKey(LoginTable_model, on_delete=models.CASCADE, null=True, blank=True)
-    Seller_name = models.CharField(max_length=100, null=True, blank=True)
+    Name = models.CharField(max_length=100, null=True, blank=True)
     Address = models.CharField(max_length=200, null=True, blank=True)
+    Phone_no = models.IntegerField(null= True, blank= True)
     Email = models.CharField(max_length=100, null=True, blank=True)
 
 class Product_Table(models.Model):
