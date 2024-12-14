@@ -11,17 +11,20 @@
 <body class="test">
 
     <table>
+      
+
         <th>User name</th>
         <th>Date</th>
         <th>Review</th>
         <th>Rating</th>
+        {% for i in val %}
         <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{{ i.Name }}</td>           
+            <td>{{ i.created_at }}</td>
+            <td>{{ i.Review }}</td>
+            <td>{{ i.Ratings }}</td>
         </tr>
-       
+       {% endfor %}
     </table>
 </body>
 </html>

@@ -28,15 +28,22 @@ urlpatterns = [
 
 
     path('Add_ViewCategory', ViewCategory.as_view(), name="Add_ViewCategory"),
+    path('delete_catagory/<int:c_id>', DeleteCategory.as_view(), name="delete_catagory"),
     path('Add_NewCategory', NewCategory.as_view(), name="Add_NewCategory"),
     path('AdminDashBoard', Dashboard.as_view(), name="AdminDashBoard"),
     path('Changepassword', Password.as_view(), name="Changepassword"),
     path('Forgotpassword', ForgotPassword.as_view(), name="Forgotpassword"),
     path('BlockAndUnblockShop', BlockAndUnblock.as_view(), name="BlockAndUnblockShop"),
     path('VerifyShop', VerifyShop.as_view(), name="VerifyShop"),
+    path('accept_shop/<int:s_id>', accept_shop.as_view(), name="accept_shop"),
+    path('reject_shop/<int:s_id>', reject_shop.as_view(), name="reject_shop"),
     path('VerifyComplaint', CompAndSentReplay.as_view(), name="VerifyComplaint"),
     path('VerifyDeliveryAgent', AdminDeliveryAgent.as_view(), name="ViewDeliveryAgent"),
+    path('approve_deliveryagent/<int:d_id>', approve_deliveryagent.as_view(), name="approve_deliveryagent"),
+    path('reject_deliveryagent/<int:d_id>', reject_deliveryagent.as_view(), name="reject_deliveryagent"),
     path('AdminReviewRating', AdminReviewRating.as_view(), name="AdminReviewRating"),
+    path('AdminReply/<int:id>', AdminReply.as_view(), name="AdminReply"),
+
 
 
     # ///////////////////////////////// DELIVERY BOY ///////////////////////////////////////////
@@ -49,7 +56,7 @@ urlpatterns = [
     path('DeliveryNotification', DeliveryNotification.as_view(), name="DeliveryNotification"),
     path('DeliveryBoyUpdateOrder', DeliveryUpdateOrder.as_view(), name="DeliveryBoyUpdateOrder"),
     path('DeliveryBoyViewOrder', DeliveryViewOrder.as_view(), name="DeliveryBoyViewOrder"),
-
+    path('DeliveryBoyReply', DeliveryBoyReply.as_view(),name="DeliveryBoyReply"),
 
 #//////////////////////////////// SELLER ///////////////////////////////////////////
 
@@ -65,6 +72,7 @@ urlpatterns = [
     path('sellersendreply', SellerSendReply.as_view(), name="sellersendreply"),
     path('sellercomp', SellerComp.as_view(), name="sellercomp"),
     path('sellerorder', SellerOrder.as_view(), name="sellerorder"),
+    path('sellerotp', SellerOtp.as_view(), name="sellerotp"),
 
 
 #//////////////////////////////// TAILOR ///////////////////////////////////////////

@@ -14,15 +14,18 @@
         <th>User Name</th>
         <th>Complaint</th>
         <th>date</th>
-        <th>Replay</th>
+        <th>Reply</th>
+        <th></th>
+        {% for i in val %}
         <tr>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{{ i.Name }}</td>
+            <td>{{ i.Complaint }}</td>
+            <td>{{ i.created_at }}</td>
+            <td>{{ i.Reply }}</td>
             <td>
-                <a href="#">Replay</a></td><br>
+                <a href="/AdminReply/{{i.id}}">Reply</a></td><br>
         </tr>
-       
+        {% endfor %}
     </table>
 </body>
 </html>

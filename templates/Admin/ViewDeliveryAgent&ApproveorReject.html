@@ -17,18 +17,20 @@
         <th>email</th>
         <th>status</th>
         <th>Verify</th>
-
+        {% for i in val %}
         <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{{ i.Name }}</td>
+            <td>{{ i.Address }}</td>
+            <td>{{ i.Phone_no }}</td>
+            <td>{{ i.Email }}</td>
+            <td>{{ i.LOGIN_ID.type }}</td>
             <td>
-                <a href="#">approve</a><br>
-                <a href="#">reject</a>
+                <a href="approve_deliveryagent/{{i.LOGIN_ID.id}}">approve</a><br>
+                <a href="reject_deliveryagent/{{i.LOGIN_ID.id}}">reject</a>
             </td>
         </tr>
+        {% endfor %}
+
        
     </table>
 </body>

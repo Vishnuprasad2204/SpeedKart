@@ -12,27 +12,26 @@
 
     <table>
         <th>shop</th>
-        <th>place</th>
         <th>address</th>
         <th>phone</th>
         <th>email</th>
+        <th>status</th>
         <th>verify</th>
+        {% for i in val %}
         <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{{ i.Name }}</td>
+            <td>{{ i.Address }}</td>
+            <td>{{ i.Phone_no }}</td>
+            <td>{{ i.Email }}</td>
+            <td>{{ i.LOGIN_ID.type }}</td>
             <td>
-                <a href="#">accept</a><br>
-                <a href="#">reject</a>
+                <a href="accept_shop/{{i.LOGIN_ID.id}}">accept</a><br>
+                <a href="reject_shop/{{i.LOGIN_ID.id}}">reject</a>
             </td>
         </tr>
+        {% endfor %}
 
        
-    </table>
-    <div class="BlockUnblock">
-    <p><a href="/BlockAndUnblockShop">Block Shop And Unblock Shop</a></p>
-    </div>
+     </table>
 </body>
 </html>

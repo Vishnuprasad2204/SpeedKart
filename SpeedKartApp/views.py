@@ -41,7 +41,42 @@ class ViewCategory(View):
     def get(self, request):
         c=Category_Table.objects.all()
         return render(request, 'Admin/Add&ViewCategory.html', {'s':c})
+
+class DeleteCategory(View):
+    def get(self, request, c_id):
+        obj = Category_Table.objects.get(id=c_id)
+        obj.delete()
+        return HttpResponse('''<script> alert('Delete Successfully');window.location="/Add_ViewCategory" </script>''')
+
+class accept_shop(View):
+    def get(self, request, s_id):
+        obj = LoginTable_model.objects.get(id=s_id)
+        obj.type = 'Seller'
+        obj.save()
+        return HttpResponse('''<script> alert('Accept Successfully');window.location="/VerifyShop" </script>''')
     
+class reject_shop(View):
+    def get(self, request, s_id):
+        obj = LoginTable_model.objects.get(id=s_id)
+        obj.type = 'Rejected'
+        obj.save()
+        return HttpResponse('''<script> alert('Reject Successfully');window.location="/VerifyShop" </script>''')
+    
+class approve_deliveryagent(View):
+    def get(self, request, d_id):
+        obj = LoginTable_model.objects.get(id=d_id)
+        obj.type = 'DeliveryAgent'
+        obj.save()
+        return HttpResponse('''<script> alert('Approve Successfully');window.location="/VerifyDeliveryAgent" </script>''')
+    
+class reject_deliveryagent(View):
+    def get(Self, request, d_id):
+        obj = LoginTable_model.objects.get(id=d_id)
+        obj.type = 'Rejected'
+        obj.save()
+        return HttpResponse('''<script> alert('Rejected Successfully');window.location="/VerifyDeliveryAgent" </script>''')
+
+
 class NewCategory(View):
     def get(self, request):
         return render(request, 'Admin/AddNewCategory.html')
@@ -69,19 +104,38 @@ class BlockAndUnblock(View):
 
 class VerifyShop(View):
     def get(self, request):
-        return render(request, 'Admin/Verify_shop.html')
+        obj = ShopTable_model.objects.all()
+        return render(request, 'Admin/Verify_shop.html', {'val':obj})
 
 class CompAndSentReplay(View):
     def get(self, request):
-        return render(request, 'Admin/ViewComplaints&sentReplay.html')
+        obj = Complaints_Reply_Table.objects.all()
+        return render(request, 'Admin/ViewComplaints&sentReplay.html',{'val':obj})
 
 class AdminDeliveryAgent(View):
     def get(self, request):
-        return render(request, 'Admin/ViewDeliveryAgent&ApproveorReject.html')
+        obj = Delivery_Agent_Table.objects.all()
+        return render(request, 'Admin/ViewDeliveryAgent&ApproveorReject.html', {'val':obj})
 
 class AdminReviewRating(View):
     def get(self, request):
-        return render(request, 'Admin/ViewReview&Rating.html')
+        obj = Review_Table.objects.all()
+        return render(request, 'Admin/ViewReview&Rating.html', {'val':obj})
+
+class AdminReply(View):
+    def get(self, request,id):
+        obj = Complaints_Reply_Table.objects.get(id=id)
+        return render(request, 'Admin/admin_reply.html',{'obj':obj})
+    def post(self, request, id):
+        
+        obj = Complaints_Reply_Table.objects.get(id=id)
+        form = reply_form(request.POST, instance=obj)
+        if form.is_valid():
+            form.save()
+        return redirect('VerifyComplaint')
+    
+
+
 
 
 #/////////////////////////////////// DELIVERY BOY ////////////////////////////////
@@ -114,6 +168,10 @@ class DeliveryUpdateOrder(View):
 class DeliveryViewOrder(View):
     def get(self, request):
         return render(request, 'Delivery boy/DeliveryBoyViewOrder.html')
+    
+class DeliveryBoyReply(View):
+    def get(self, request):
+        return render(request, 'Delivery boy/DeliveryBoyReply.html')
     
 
 #//////////////////////////////// SELLER  /////////////////////////////////////
@@ -166,6 +224,10 @@ class SellerComp(View):
 class SellerOrder(View):
     def get(self, request):
         return render(request, 'seller/vieworder_seller.html')
+    
+class SellerOtp(View):
+    def get(self, request):
+        return render(request, 'seller/otp_seller.html')
     
 
 #////////////////////////////  TAILOR /////////////////////////////////////////////////////////

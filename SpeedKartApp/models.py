@@ -22,6 +22,7 @@ class ShopTable_model(models.Model):
 
 class Review_Table(models.Model):
     USER_ID = models.ForeignKey(UserTable_model, on_delete=models.CASCADE, null=True, blank=True)
+    Name = models.CharField(max_length=100, null=True, blank=True)
     created_at = models.DateField(auto_now_add= True, null=True, blank=True)
     updated_at = models.DateField(auto_now= True, null=True, blank=True)
     Review = models.CharField(max_length= 200, null= True, blank= True)
@@ -29,6 +30,7 @@ class Review_Table(models.Model):
 
 class Complaints_Reply_Table(models.Model):
     USER_ID = models.ForeignKey(UserTable_model, on_delete=models.CASCADE, null=True, blank=True)
+    Name = models.CharField(max_length=100, null=True, blank=True)
     Complaint = models.CharField(max_length= 200,null= True,blank= True)
     created_at = models.DateField(auto_now_add= True, null=True, blank=True)
     updated_at = models.DateField(auto_now= True, null=True, blank=True)
