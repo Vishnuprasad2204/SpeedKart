@@ -42,6 +42,7 @@ class Delivery_Agent_Table(models.Model):
     Address = models.CharField(max_length=200, null=True, blank=True)
     Phone_no = models.IntegerField(null= True, blank= True)
     Email = models.CharField(max_length=100, null=True, blank=True)
+
 class Category_Table(models.Model):
     Category_name = models.CharField(max_length= 100, null= True, blank= True)
     Description =  models.CharField(max_length= 100, null= True, blank= True)
@@ -57,7 +58,7 @@ class Seller_Table(models.Model):
 
 class Product_Table(models.Model):
     Product_name = models.CharField(max_length=100, null=True, blank=True)
-    Product_image = models.FileField(upload_to='product',null= True,blank=True)
+    Product_image = models.FileField(upload_to='product/',null= True,blank=True)
     Description =  models.CharField(max_length= 100, null= True, blank= True)
     Price = models.IntegerField(null= True, blank= True)
     Quantity = models.IntegerField(null= True, blank= True)

@@ -12,11 +12,11 @@
     <div class="test"><form action="" class="regcard" >
         <h2>Reply</h2>
         <select id="reply" name="Assign delivery agent">
-            <option value="1">Option 1</option>
-            <option value="2">Option 2</option>
-            <option value="3">Option 3</option>
+            {% for i in obj %}
+            <option value=>{{ i.Name }}</option>
+            {% endfor %}
         </select>
-        <input type="textarea" placeholder="Description"><br>
+        <input type="textarea" placeholder="Address"><br>
         <button type="submit">Assign</button><br>
         </div>
 </body>

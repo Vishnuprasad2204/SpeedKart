@@ -16,3 +16,8 @@ class reply_form(ModelForm):
     class Meta:
         model = Complaints_Reply_Table
         fields = ['Reply']
+
+class Product_form(ModelForm):
+    class Meta:
+        model = Product_Table
+        fields = ['Product_name', 'Product_image', 'Description', 'Price', 'Quantity']

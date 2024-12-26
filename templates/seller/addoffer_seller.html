@@ -1,0 +1,21 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Offer ..!</title>
+    <link rel="stylesheet" href="{% static 'style.css'  %}">
+
+</head>
+<body class="test">
+    <form action="" class="CategoryCard" method="post">
+      {% csrf_token %}
+    <h1>Add Offer!</h1>
+    <input type="text" placeholder="Name" name="Offer_name" required><br>
+    <input type="text" placeholder="Details" name="details" required><br>
+    <button type="submit">Add New Offer</button><br>
+  </form></div>
+</body>
+</html>

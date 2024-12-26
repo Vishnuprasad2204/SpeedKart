@@ -66,7 +66,7 @@ body{
       border-radius: 8px;
       background-color: white;
       transition: 0.3s;
-      color: black;
+      color: rgb(103, 77, 77);
     }
     button:hover
 {
@@ -121,7 +121,7 @@ th, td{
     box-shadow: 10px 20px 30px rgb(23, 21, 21);
     position: absolute;
     right: 250px;
-    bottom: 250px;
+    bottom: 100px;
 }
 .passwordcard{
     border: 2.5px solid rgb(255, 255, 255);
@@ -199,7 +199,7 @@ option
 }
 .navbar{
     width: 100%;
-    background-color: #6f42c1;
+    background-color: #ff4d4d;
     
     display: flex;
     justify-content: space-between;
@@ -275,9 +275,8 @@ option
     box-sizing: border-box;   
   }
   .add{
-    position: absolute;
-    top: 10px;
-    right: 20px;
+    margin-bottom: 600px;
+    
   }
 
   .icon{
@@ -295,10 +294,17 @@ option
   }
   .SellerOrder{
     position: absolute;
-    bottom: 260px;
+    top: 60px;
   }
 
-  .a{
+.add
+{
+right: 400px;
+top: 290px;
+background-color: #c79434;
+}
+
+  /* .a{
     position: relative;
     background: #fff;
     color: #fff;
@@ -368,5 +374,5 @@ option
 .a:hover i::after{
     width: 20px;
     left: 80%;
-}                                         
+}                                          */
             

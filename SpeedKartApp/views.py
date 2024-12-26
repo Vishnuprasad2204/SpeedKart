@@ -178,7 +178,8 @@ class DeliveryBoyReply(View):
 
 class SellerDeliveryBoy(View):
     def get(self, request):
-        return render(request, 'seller/assigndeliveryboy_seller.html')
+        obj = Delivery_Agent_Table.objects.all()
+        return render(request, 'seller/assigndeliveryboy_seller.html', {'obj': obj})
 
 class SellerChangePassword(View):
     def get(self, request):
@@ -192,9 +193,30 @@ class SellerOffer(View):
     def get(self, request):
         return render(request, 'seller/manageoffer_seller.html')
     
+class SellerAddOffer(View):
+    def get(self, request):
+        return render(request, 'seller/addoffer_seller.html')
+    
 class SellerProduct(View):
     def get(self, request):
-        return render(request, 'seller/manageproduct_seller.html')
+        x=Product_Table.objects.all()
+        return render(request, 'seller/manageproduct_seller.html', {'obj' : x})
+    
+class SellerAddProduct(View):
+    def get(self, request):
+        return render(request, 'seller/addproduct_seller.html')
+    def post(self, request):
+        c=Product_form(request.POST, request.FILES)
+        if c.is_valid():
+            c.save()
+            return HttpResponse('''<script>window.location="/sellerproduct"</script>''')
+
+class DeleteProduct(View):
+    def get(self, request, pk):
+        c = Product_Table.objects.get(pk=pk)
+        c.delete()
+        return HttpResponse('''<script>alert('deleted successfully');window.location="/sellerproduct"</script>''')
+
     
 class SellerProfile(View):
     def get(self, request):
