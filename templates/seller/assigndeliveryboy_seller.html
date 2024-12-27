@@ -10,13 +10,13 @@
 </head>
 <body>
     <div class="test"><form action="" class="regcard" >
-        <h2>Reply</h2>
-        <select id="reply" name="Assign delivery agent">
+        <h2>Order</h2>
+        <select id="Order" name="Assign delivery agent">
             {% for i in obj %}
             <option value=>{{ i.Name }}</option>
             {% endfor %}
         </select>
-        <input type="textarea" placeholder="Address"><br>
+        <label>Address :- {{ obj1.User.Address }}</label><br>
         <button type="submit">Assign</button><br>
         </div>
 </body>

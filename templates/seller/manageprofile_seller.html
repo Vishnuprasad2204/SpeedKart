@@ -8,7 +8,6 @@
     <title>Document</title>
     <link rel="stylesheet" href="{% static 'style.css'  %}">
 </head>
-<body>
     <!-- <table>
        <tr>
         <th>Name</th>
@@ -26,14 +25,17 @@
         </td>
        </tr>
     </table> -->
-    <body>
-        <div class="test"><form action="" class="regcard">
+<body>
+        <div class="test"><form action="" method="post" class="regcard">
+            {% csrf_token %}
         <h2>Seller Profile</h2>
-        <input type="text" placeholder="Name"><br>
-        <input type="email" placeholder="email"><br>
-        <input type="text" placeholder="Phone Number"><br>
+        <input type="text" placeholder="Name" name="Name" value="{{ obj.Name }}"><br>
+        <input type="text" placeholder="Address" name="Address" value="{{ obj.Address }}"><br>
+        <input type="text" placeholder="Phone Number" name="Phone_no" value="{{ obj.Phone_no }}"><br>
+        <input type="email" placeholder="E-mail" name="Email" value="{{ obj.Email }}"><br>
         <button type="submit">UPDATE</button>
+        </form>
 
-        </body>
+        
 </body>
 </html>

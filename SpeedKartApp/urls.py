@@ -60,7 +60,7 @@ urlpatterns = [
 
 #//////////////////////////////// SELLER ///////////////////////////////////////////
 
-    path('assigndeliveryboyseller', SellerDeliveryBoy.as_view(), name="assigndeliveryboyseller"),
+    path('assigndeliveryboyseller/<int:o_id>', SellerDeliveryBoy.as_view(), name="assigndeliveryboyseller"),
     path('sellerchangepassword', SellerChangePassword.as_view(), name="sellerchangepassword"),
     path('sellerconfirmpassword', SellerConfirmPassword.as_view(), name="sellerconfirmpassword"),
     path('selleroffer', SellerOffer.as_view(), name="selleroffer"),
@@ -68,6 +68,7 @@ urlpatterns = [
     path('sellerproduct', SellerProduct.as_view(), name="sellerproduct"),
     path('selleraddproduct', SellerAddProduct.as_view(), name="selleraddproduct"),
     path('deletepro/<int:pk>', DeleteProduct.as_view(), name="deletepro"),
+    path('editpro/<int:pk>', EditProduct.as_view(), name="editpro"),
     path('sellerprofile', SellerProfile.as_view(), name="sellerprofile"),
     path('sellernewpassword', SellerNewPassword.as_view(), name="sellernewpassword"),
     path('sellerreview', SellerReview.as_view(), name="sellerreview"),

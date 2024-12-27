@@ -57,6 +57,7 @@ class Seller_Table(models.Model):
     Email = models.CharField(max_length=100, null=True, blank=True)
 
 class Product_Table(models.Model):
+    SELLER_ID = models.ForeignKey(Seller_Table, on_delete=models.CASCADE, null=True, blank=True)
     Product_name = models.CharField(max_length=100, null=True, blank=True)
     Product_image = models.FileField(upload_to='product/',null= True,blank=True)
     Description =  models.CharField(max_length= 100, null= True, blank= True)
@@ -91,7 +92,8 @@ class Order_Table(models.Model):
     Date_Time = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     Order_details = models.CharField(max_length=100, null=True, blank=True)
     PRODUCT_ID = models.ForeignKey(Product_Table,on_delete=models.CASCADE, null= True, blank= True)
-    User = models.ForeignKey(LoginTable_model, on_delete=models.CASCADE, null=True, blank=True)
+    User = models.ForeignKey(UserTable_model, on_delete=models.CASCADE, null=True, blank=True)
+    Quantity = models.IntegerField(null= True, blank= True)
     Order_Status = models.CharField(max_length=100, null=True, blank=True)
 
 
@@ -116,3 +118,9 @@ class Notification_Table(models.Model):
     updated_at = models.DateTimeField(auto_now= True, null=True, blank=True)
     Notification = models.CharField(max_length=100, null=True, blank=True)
 
+class Assign_Table(models.Model):
+    deliveryboy = models.ForeignKey(Delivery_Agent_Table, on_delete= models.CASCADE, null=True, blank=True)
+    Order = models.ForeignKey(Order_Table,on_delete= models.CASCADE, null= True, blank= True)
+    Order_Status = models.CharField(max_length=100, null=True, blank=True)
+    Created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now= True, null=True, blank=True)

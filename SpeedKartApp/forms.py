@@ -21,3 +21,9 @@ class Product_form(ModelForm):
     class Meta:
         model = Product_Table
         fields = ['Product_name', 'Product_image', 'Description', 'Price', 'Quantity']
+
+class Profile_form(ModelForm):
+    class Meta:
+        model = Seller_Table
+        fields = ['Name', 'Address', 'Phone_no', 'Email']
+

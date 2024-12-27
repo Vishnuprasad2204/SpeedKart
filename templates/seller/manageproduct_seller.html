@@ -30,15 +30,13 @@
         <td>{{i.Price}}</td>
         <td>{{i.Quantity}}</td>
         <td>
-            <a href="#">Edit</a>
+            <a href="/editpro/{{i.id}}" >Edit</a><br>
             <a href="/deletepro/{{i.id}}" onclick="return confirm('Are you sure you want to delete this item?')">Delete</a>
         </td>
        </tr>
        {% endfor %}
 
     </table>
-    <div class="SellerOrder">
-        <p><a href="/sellerorder" class="a">View Order</a></p>
-        </div>
+   
 </body>
 </html>

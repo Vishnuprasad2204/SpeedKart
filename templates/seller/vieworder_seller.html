@@ -11,24 +11,37 @@
 </head>
 <body>
     <div class="test">
+        
         <table>
+        <th>Product Name</th>
+        <th>Product image</th>
         <th>Customer name </th>
         <th>Customer email</th>
         <th>Customer phone no</th>
+        <th>Address</th>
         <th>Quantity</th>
+        <th>Price</th>
         <th>Order Description</th>
         <th>Status</th>
+        <th></th>
+        {% for i in obj %}
        <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>{{ i.PRODUCT_ID.Product_name}}</td>
+        <td><img src="{{i.Product_image.url}}" alt="" height="100px" width="100px"></td>
+        <td>{{ i.User.Name }}</td>
+        <td>{{ i.User.Email }}</td>
+        <td>{{ i.User.Phone_no }}</td>
+        <td>{{ i.User.Address }}</td>
+        <td>{{ i.Quantity }}</td>
+        <td>{{ i.PRODUCT_ID.Price }}$</td>
+        <td>{{ i.PRODUCT_ID.Description }}</td>
+        <td>{{ i.PRODUCT_ID.Order_Status }}</td>
        <div class="asign">
         <td>
-            <a href="/assigndeliveryboyseller">Assign</a>
+            <a href="/assigndeliveryboyseller/{{i.id}}">Assign</a>
         </td></div>
        </tr>
+       {% endfor %}
     </table>
 </body>
 </html>

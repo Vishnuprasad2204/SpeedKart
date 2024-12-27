@@ -13,6 +13,7 @@ class Login(View):
         username = request.POST.get('username')
         password = request.POST.get('password')
         login_obj = LoginTable_model.objects.get(username=username, password=password)
+        request.session['login_id']=login_obj.id
         if login_obj.type == 'Admin':
             return HttpResponse('''<script> alert('Welcome to Home');window.location="/AdminDashBoard"</script>''')
         
@@ -177,9 +178,10 @@ class DeliveryBoyReply(View):
 #//////////////////////////////// SELLER  /////////////////////////////////////
 
 class SellerDeliveryBoy(View):
-    def get(self, request):
+    def get(self, request, o_id):
         obj = Delivery_Agent_Table.objects.all()
-        return render(request, 'seller/assigndeliveryboy_seller.html', {'obj': obj})
+        obj1 = Order_Table.objects.get(id=o_id)
+        return render(request, 'seller/assigndeliveryboy_seller.html', {'obj': obj, 'obj1' :obj1})
 
 class SellerChangePassword(View):
     def get(self, request):
@@ -217,10 +219,31 @@ class DeleteProduct(View):
         c.delete()
         return HttpResponse('''<script>alert('deleted successfully');window.location="/sellerproduct"</script>''')
 
+class EditProduct(View):
+    def get(self, request, pk):
+        c = Product_Table.objects.get(pk=pk)
+        return render(request, 'seller/editproduct_seller.html', {'obj': c})
+    def post(self, request, pk):
+        c = Product_Table.objects.get(pk=pk)
+        c=Product_form(request.POST, request.FILES, instance=c)
+        if c.is_valid():
+            c.save()
+            return HttpResponse('''<script>window.location="/sellerproduct"</script>''')
+
+
+       
+
     
 class SellerProfile(View):
     def get(self, request):
-        return render(request, 'seller/manageprofile_seller.html')
+        obj=Seller_Table.objects.get(LOGIN_ID_id=request.session['login_id'])
+        return render(request, 'seller/manageprofile_seller.html', {'obj': obj})
+    def post(self, request):
+        obj=Seller_Table.objects.get(LOGIN_ID_id=request.session['login_id'])
+        obj=Profile_form(request.POST, instance=obj)
+        if obj.is_valid():
+            obj.save()
+            return HttpResponse('''<script>alert('updated successfully');window.location="/sellerprofile"</script>''')
     
 class SellerNewPassword(View):
     def get(self, request):
@@ -245,7 +268,8 @@ class SellerComp(View):
     
 class SellerOrder(View):
     def get(self, request):
-        return render(request, 'seller/vieworder_seller.html')
+        obj=Order_Table.objects.filter(PRODUCT_ID__SELLER_ID__LOGIN_ID_id=request.session['login_id'])
+        return render(request, 'seller/vieworder_seller.html', {'obj': obj})
     
 class SellerOtp(View):
     def get(self, request):
