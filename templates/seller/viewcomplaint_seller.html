@@ -11,18 +11,25 @@
 <body class="test">
 
     <table>
+        <tr>
         <th>User Name</th>
+        <th>product name</th>
         <th>Complaint</th>
         <th> date </th>
         <th>Reply</th>
+        <th></th>
+    </tr>
+    {% for i in o %}
         <tr>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{{i.USER_ID.LOGIN_ID.username}}</td>
+        <td>{{i.PRODUCT_ID.Product_name}}</td>
+        <td>{{i.Complaint}}</td>
+        <td>{{i.created_at}}</td>
+        <td>{{i.Reply}}</td>
             <td>
-                <a href="/sellersendreply">Reply</a></td><br></tr>
+                <a href="/sellersendreply/{{i.id}}">Reply</a></td><br></tr>
         </tr>
-       
+       {%endfor%}
     </table>
 </body>
 </html>

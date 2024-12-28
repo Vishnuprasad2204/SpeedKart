@@ -14,7 +14,13 @@
       {% csrf_token %}
     <h1>Add Offer!</h1>
     <input type="text" placeholder="Name" name="Offer_name" required><br>
-    <input type="text" placeholder="Details" name="details" required><br>
+    <select name="PRODUCT_ID">
+      {% for i in obj %}
+      <option value="{{i.id}}">{{i.Product_name}}</option>
+      {%endfor %}
+    </select>
+    <input type="text" placeholder="Details" name="Offer_details" required><br>
+    <input type="text" placeholder="Discount" name="discount" required><br>
     <button type="submit">Add New Offer</button><br>
   </form></div>
 </body>

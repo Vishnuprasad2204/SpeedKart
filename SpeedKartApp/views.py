@@ -28,6 +28,12 @@ class Login(View):
             return HttpResponse('''<script> alert('Welcome to Home');window.location="/TailorDashBoard" </script> ''')
         else:
             return HttpResponse('''<script> alert('Invalid Credentials');window.location="/login" </script>''')
+        
+
+class Logout(View):
+    def get(self, request):
+            return HttpResponse('''<script> alert('Logout Successfully');window.location="/" </script> ''')
+
 
     #//////////////////////////////////REGISTRATION///////////////////////////////
 
@@ -183,6 +189,13 @@ class SellerDeliveryBoy(View):
         obj1 = Order_Table.objects.get(id=o_id)
         return render(request, 'seller/assigndeliveryboy_seller.html', {'obj': obj, 'obj1' :obj1})
 
+class AssignDeliveryBoy(View):
+    def post(self, request):
+        form=Assign_Tableform(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('sellerorder')
+
 class SellerChangePassword(View):
     def get(self, request):
         return render(request, 'seller/changepassword_seller.html')
@@ -193,11 +206,38 @@ class SellerConfirmPassword(View):
     
 class SellerOffer(View):
     def get(self, request):
-        return render(request, 'seller/manageoffer_seller.html')
+        c=Offer_Table.objects.all()
+        return render(request, 'seller/manageoffer_seller.html',{'obj': c})
     
+class Deleteoffer(View):
+    def get(self, request,pk):
+        c = Offer_Table.objects.get(pk=pk)
+        c.delete()
+        return HttpResponse('''<script>alert('deleted successfully');window.location="/selleroffer"</script>''')
+
+class Editoffer(View):
+    def get(self,request,pk):
+        c=Offer_Table.objects.get(pk=pk)
+        d = Product_Table.objects.all()
+        return render(request, 'seller/editoffer.html',{'o': c, 'obj':d})
+    def post(self, request, pk):
+        c=Offer_Table.objects.get(pk=pk)
+        d=AddOffer_form(request.POST, instance=c)
+        if d.is_valid():
+            d.save()
+            return HttpResponse('''<script>alert("updated successfullyy");window.location='/selleroffer'</script>''')
+
+
 class SellerAddOffer(View):
     def get(self, request):
-        return render(request, 'seller/addoffer_seller.html')
+        c=Product_Table.objects.all()
+        return render(request, 'seller/addoffer_seller.html', {'obj': c})
+    
+    def post(self, request):
+        form= AddOffer_form(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('selleroffer')
     
 class SellerProduct(View):
     def get(self, request):
@@ -252,19 +292,29 @@ class SellerNewPassword(View):
 
 class SellerReview(View):
     def get(self, request):
-        return render(request, 'seller/review_seller.html')
+        c=Productrate_Table.objects.all()
+        return render(request, 'seller/review_seller.html',{'o':c})
     
 class SellerDashBoard(View):
     def get(self, request):
         return render(request, 'seller/SellerDashBoard.html')
     
 class SellerSendReply(View):
-    def get(self, request):
-        return render(request, 'seller/sendreply_seller.html')
+    def get(self, request,pk):
+        c=Productrate_Table.objects.get(pk=pk)
+        return render(request, 'seller/sendreply_seller.html',{'o':c})
+    def post(self, request, pk):
+        c=Productrate_Table.objects.get(pk=pk)
+        d=Prorep(request.POST, instance=c)
+        if d.is_valid():
+            d.save()
+        return HttpResponse('''<script>alert('replied successfully');window.location="/sellercomp"</script>''')
+    
 
 class SellerComp(View):
     def get(self, request):
-        return render(request, 'seller/viewcomplaint_seller.html')
+        c=Productrate_Table.objects.all()
+        return render(request, 'seller/viewcomplaint_seller.html',{'o':c})
     
 class SellerOrder(View):
     def get(self, request):

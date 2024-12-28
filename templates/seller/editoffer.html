@@ -1,0 +1,27 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Offer ..!</title>
+    <link rel="stylesheet" href="{% static 'style.css'  %}">
+
+</head>
+<body class="test">
+    <form action="" class="CategoryCard" method="post">
+      {% csrf_token %}
+    <h1>Edit Offer!</h1>
+    <input type="text" placeholder="Name" name="Offer_name" value="{{o.Offer_name}}" required><br>
+    <select name="PRODUCT_ID">
+      {% for i in obj %}
+      <option value="{{i.id}}" {% if i.id == o.PRODUCT_ID.id  %} selected {% endif %}>{{i.Product_name}}</option>
+      {%endfor %}
+    </select>
+    <input type="text" placeholder="Details" name="Offer_details" value="{{o.Offer_details}}" required><br>
+    <input type="text" placeholder="Discount" name="discount" value="{{o.discount}}" required><br>
+    <button type="submit">Edit Offer</button><br>
+  </form></div>
+</body>
+</html>

@@ -21,4 +21,5 @@ admin.site.register(Cart_Table)
 admin.site.register(Payment_Table)
 admin.site.register(Design_Table)
 admin.site.register(Notification_Table)
-
+admin.site.register(Assign_Table)
+admin.site.register(Productrate_Table)

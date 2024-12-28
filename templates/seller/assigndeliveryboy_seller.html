@@ -9,15 +9,18 @@
     <link rel="stylesheet" href="{% static 'style.css'  %}">
 </head>
 <body>
-    <div class="test"><form action="" class="regcard" >
+    <div class="test"><form action="/AssignDeliveryBoy" class="regcard" method="post">
+        {% csrf_token %}
         <h2>Order</h2>
-        <select id="Order" name="Assign delivery agent">
+        <input type="hidden" name="Order"  value="{{obj1.id}}">
+        <select id="Order" name="deliveryboy">
             {% for i in obj %}
-            <option value=>{{ i.Name }}</option>
+            <option value="{{i.id}}">{{ i.Name }}</option>
             {% endfor %}
         </select>
         <label>Address :- {{ obj1.User.Address }}</label><br>
         <button type="submit">Assign</button><br>
+        </form>
         </div>
 </body>
 </html>

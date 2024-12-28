@@ -27,3 +27,18 @@ class Profile_form(ModelForm):
         model = Seller_Table
         fields = ['Name', 'Address', 'Phone_no', 'Email']
 
+class Assign_Tableform(ModelForm):
+    class Meta:
+        model = Assign_Table
+        fields = ['deliveryboy', 'Order']
+
+class AddOffer_form(ModelForm):
+    class Meta:
+        model = Offer_Table
+        fields = ['Offer_name', 'Offer_details','PRODUCT_ID','discount']
+
+
+class Prorep(ModelForm):
+    class Meta:
+        model = Productrate_Table
+        fields = ['Reply']

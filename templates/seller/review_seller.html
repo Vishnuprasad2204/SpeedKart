@@ -12,18 +12,25 @@
 <body>
     <div class="test">
         <table>
+            <tr>
         <th>User name</th>
+        <th>Product name</th>
+        <th>Product image</th>
         <th>Date</th>
         <th>Review</th>
         <th>Rating</th>
-        
+    </tr>
+    {% for i in o %}
         <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>{{i.USER_ID.LOGIN_ID.username}}</td>
+        <td>{{i.PRODUCT_ID.Product_name}}</td>
+        <td><img src="{{i.PRODUCT_ID.Product_image.url}}" alt="" height="100px" width="100px"></td>
+        <td>{{i.created_at}}</td>
+        <td>{{i.Review}}</td>
+        <td>{{i.Ratings}}</td>
         
        </tr>
+       {% endfor %}
     </table>
 </body>
 </html>

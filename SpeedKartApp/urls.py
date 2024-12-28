@@ -21,6 +21,7 @@ from SpeedKartApp.views import *
 
 urlpatterns = [
     path('', Login.as_view(), name="Login"),
+    path('logout',Logout.as_view()),
     
     path('Registration', Registration.as_view(), name="Registration"),
 
@@ -64,6 +65,8 @@ urlpatterns = [
     path('sellerchangepassword', SellerChangePassword.as_view(), name="sellerchangepassword"),
     path('sellerconfirmpassword', SellerConfirmPassword.as_view(), name="sellerconfirmpassword"),
     path('selleroffer', SellerOffer.as_view(), name="selleroffer"),
+    path('editoffer/<int:pk>',Editoffer.as_view(), name="editoffer"), 
+    path('deleteoff/<int:pk>', Deleteoffer.as_view(), name="deleteoff"),
     path('selleraddoffer', SellerAddOffer.as_view(), name="selleraddoffer"),
     path('sellerproduct', SellerProduct.as_view(), name="sellerproduct"),
     path('selleraddproduct', SellerAddProduct.as_view(), name="selleraddproduct"),
@@ -73,10 +76,11 @@ urlpatterns = [
     path('sellernewpassword', SellerNewPassword.as_view(), name="sellernewpassword"),
     path('sellerreview', SellerReview.as_view(), name="sellerreview"),
     path('sellerdashboard', SellerDashBoard.as_view(), name="sellerdashboard"),
-    path('sellersendreply', SellerSendReply.as_view(), name="sellersendreply"),
+    path('sellersendreply/<int:pk>/', SellerSendReply.as_view(), name="sellersendreply"),
     path('sellercomp', SellerComp.as_view(), name="sellercomp"),
     path('sellerorder', SellerOrder.as_view(), name="sellerorder"),
     path('sellerotp', SellerOtp.as_view(), name="sellerotp"),
+    path('AssignDeliveryBoy',AssignDeliveryBoy.as_view(),name='AssignDeliveryBoy'),
 
 
 #//////////////////////////////// TAILOR ///////////////////////////////////////////

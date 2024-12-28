@@ -27,7 +27,7 @@
         {% for i in obj %}
        <tr>
         <td>{{ i.PRODUCT_ID.Product_name}}</td>
-        <td><img src="{{i.Product_image.url}}" alt="" height="100px" width="100px"></td>
+        <td><img src="{{i.PRODUCT_ID.Product_image.url}}" alt="" height="100px" width="100px"></td>
         <td>{{ i.User.Name }}</td>
         <td>{{ i.User.Email }}</td>
         <td>{{ i.User.Phone_no }}</td>

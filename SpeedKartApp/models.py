@@ -64,6 +64,18 @@ class Product_Table(models.Model):
     Price = models.IntegerField(null= True, blank= True)
     Quantity = models.IntegerField(null= True, blank= True)
 
+class Productrate_Table(models.Model):
+    USER_ID = models.ForeignKey(UserTable_model, on_delete=models.CASCADE, null=True, blank=True)
+    PRODUCT_ID = models.ForeignKey(Product_Table, on_delete=models.CASCADE, null=True, blank=True)
+    created_at = models.DateField(auto_now_add= True, null=True, blank=True)
+    updated_at = models.DateField(auto_now= True, null=True, blank=True)
+    Review = models.CharField(max_length= 200, null= True, blank= True)
+    Ratings = models.IntegerField(null= True, blank= True)
+    Complaint = models.CharField(max_length= 200,null= True,blank= True)
+    Reply = models.CharField(max_length= 200,null= True,blank= True)
+
+
+
 class Tailor_Table(models.Model):
     LOGIN_ID = models.ForeignKey(LoginTable_model, on_delete=models.CASCADE, null=True, blank=True)
     Name = models.CharField(max_length=100, null=True, blank=True)
@@ -85,6 +97,7 @@ class Offer_Table(models.Model):
     created_at = models.DateField(auto_now_add= True, null=True, blank=True)
     updated_at = models.DateField(auto_now= True, null=True, blank=True)
     Offer_details = models.CharField(max_length=100, null=True, blank=True)
+    discount = models.IntegerField(null=True, blank=True)
 
 class Order_Table(models.Model):
     #created_at = models.DateField(auto_now_add= True)

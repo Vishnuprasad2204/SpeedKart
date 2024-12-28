@@ -15,19 +15,30 @@
             <a href="/selleraddoffer"><i class ="material-icons">add</i></a>
         </div>
     <table>
+        <tr>
         <th>Offer name </th>
         <th>Offer Date</th>
+        <th>Product Name</th>
+        <th>Product Image</th>
         <th>Offer Details</th>
+        <th>Discount</th>
         <th></th>
+        </tr>
+        {% for i in obj %}
        <tr>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>{{ i.Offer_name}}</td>
+        <td>{{ i.created_at}}</td>
+        <td>{{ i.PRODUCT_ID.Product_name}}</td>
+        <td><img src="{{i.PRODUCT_ID.Product_image.url}}" alt="" height="100px" width="100px"></td>
+        <td>{{ i.Offer_details}}</td>
+        <td>{{ i.discount}}</td>
         <td>
-            <a href="#">Edit</a><br>
-            <a href="#">Delete</a>
+            <a href="/editoffer/{{i.id}}">Edit</a><br>
+            <a href="/deleteoff/{{i.id}}" onclick="return confirm('Are you sure you want to delete this item?')">Delete</a>
+       
         </td>
-       </tr>
+    </tr>
+    {% endfor %}
     </table>
 </body>
 </html>
