@@ -13,24 +13,29 @@ class UserTable_model(models.Model):
     Phone_no = models.IntegerField(null= True, blank= True)
     Address = models.CharField(max_length=200, null=True, blank=True)
 
-class ShopTable_model(models.Model):
+class Seller_Table(models.Model):
     LOGIN_ID = models.ForeignKey(LoginTable_model, on_delete=models.CASCADE, null=True, blank=True)
     Name = models.CharField(max_length=100, null=True, blank=True)
     Address = models.CharField(max_length=200, null=True, blank=True)
     Phone_no = models.IntegerField(null= True, blank= True)
-    Email = models.CharField(max_length= 100, null= True ,blank= True)
+    Email = models.CharField(max_length=100, null=True, blank=True)
 
+
+
+# review to app -user to admin
 class Review_Table(models.Model):
     USER_ID = models.ForeignKey(UserTable_model, on_delete=models.CASCADE, null=True, blank=True)
-    Name = models.CharField(max_length=100, null=True, blank=True)
     created_at = models.DateField(auto_now_add= True, null=True, blank=True)
     updated_at = models.DateField(auto_now= True, null=True, blank=True)
     Review = models.CharField(max_length= 200, null= True, blank= True)
     Ratings = models.IntegerField(null= True, blank= True)
 
+
+
+# complaint to admin
 class Complaints_Reply_Table(models.Model):
     USER_ID = models.ForeignKey(UserTable_model, on_delete=models.CASCADE, null=True, blank=True)
-    Name = models.CharField(max_length=100, null=True, blank=True)
+    SELLER_ID = models.ForeignKey(Seller_Table, on_delete=models.CASCADE, null=True, blank=True)
     Complaint = models.CharField(max_length= 200,null= True,blank= True)
     created_at = models.DateField(auto_now_add= True, null=True, blank=True)
     updated_at = models.DateField(auto_now= True, null=True, blank=True)
@@ -49,12 +54,7 @@ class Category_Table(models.Model):
     created_at = models.DateField(auto_now_add= True, null=True, blank=True)
     updated_at = models.DateField(auto_now= True, null=True, blank=True)
 
-class Seller_Table(models.Model):
-    LOGIN_ID = models.ForeignKey(LoginTable_model, on_delete=models.CASCADE, null=True, blank=True)
-    Name = models.CharField(max_length=100, null=True, blank=True)
-    Address = models.CharField(max_length=200, null=True, blank=True)
-    Phone_no = models.IntegerField(null= True, blank= True)
-    Email = models.CharField(max_length=100, null=True, blank=True)
+
 
 class Product_Table(models.Model):
     SELLER_ID = models.ForeignKey(Seller_Table, on_delete=models.CASCADE, null=True, blank=True)
@@ -64,6 +64,9 @@ class Product_Table(models.Model):
     Price = models.IntegerField(null= True, blank= True)
     Quantity = models.IntegerField(null= True, blank= True)
 
+
+
+# product complaint and rating
 class Productrate_Table(models.Model):
     USER_ID = models.ForeignKey(UserTable_model, on_delete=models.CASCADE, null=True, blank=True)
     PRODUCT_ID = models.ForeignKey(Product_Table, on_delete=models.CASCADE, null=True, blank=True)
@@ -82,6 +85,8 @@ class Tailor_Table(models.Model):
     Address = models.CharField(max_length=200, null=True, blank=True)
     Phone_no = models.IntegerField(null= True, blank= True)
     Email = models.CharField(max_length=100, null=True, blank=True)
+
+
 
 class Request_Table(models.Model):
     TAILOR_ID = models.ForeignKey(Tailor_Table, on_delete=models.CASCADE, null=True, blank=True)
@@ -119,9 +124,14 @@ class Payment_Table(models.Model):
     User_id = models.ForeignKey(LoginTable_model, on_delete=models.CASCADE, null=True, blank=True)
     CART_ID = models.ForeignKey(Cart_Table, on_delete=models.CASCADE, null=True, blank=True)
 
+
+
+
+# uploading by tailor
 class Design_Table(models.Model):
     Design_name = models.CharField(max_length=100, null=True, blank=True)
     Design_image = models.FileField(upload_to='tailordesign/', null=True, blank=True)
+    Price = models.IntegerField(null= True, blank= True)
     TAILOR_ID = models.ForeignKey(Tailor_Table, on_delete=models.CASCADE, null= True, blank=True)
     
 class Notification_Table(models.Model):

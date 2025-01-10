@@ -42,3 +42,19 @@ class Prorep(ModelForm):
     class Meta:
         model = Productrate_Table
         fields = ['Reply']
+
+class Compadmin(ModelForm):
+    class Meta:
+        model = Complaints_Reply_Table
+        fields = ['SELLER_ID', 'Complaint']
+
+class Design_form(ModelForm):
+    class Meta:
+        model = Design_Table
+        fields = ['Design_name', 'Design_image','Price']
+
+class TailorProfile_form(ModelForm):
+    class Meta:
+        model = Tailor_Table
+        fields = ['Name', 'Address','Phone_no', 'Email']
+

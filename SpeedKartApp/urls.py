@@ -76,8 +76,11 @@ urlpatterns = [
     path('sellernewpassword', SellerNewPassword.as_view(), name="sellernewpassword"),
     path('sellerreview', SellerReview.as_view(), name="sellerreview"),
     path('sellerdashboard', SellerDashBoard.as_view(), name="sellerdashboard"),
+    path('sellersendcomp', SellerSendComp.as_view(), name="sellersendcomp"),
+    path('sellerviewreply', SellerViewReply.as_view(), name="sellerviewreply"),
     path('sellersendreply/<int:pk>/', SellerSendReply.as_view(), name="sellersendreply"),
     path('sellercomp', SellerComp.as_view(), name="sellercomp"),
+    path('sellercompdash', sellercompdash.as_view(), name="sellercompdash"),
     path('sellerorder', SellerOrder.as_view(), name="sellerorder"),
     path('sellerotp', SellerOtp.as_view(), name="sellerotp"),
     path('AssignDeliveryBoy',AssignDeliveryBoy.as_view(),name='AssignDeliveryBoy'),
@@ -87,9 +90,11 @@ urlpatterns = [
 
     path('TailorDeliveryAgent', TailorDeliveryAgent.as_view(), name="TailorDeliveryAgent"),
     path('TailorDesign', TailorDesign.as_view(), name="TailorDesign"),
+    path('TailorAddDesign', TailorAddDesign.as_view(), name="TailorAddDesign"),
     path('TailorProfile', TailorProfile.as_view(), name="TailorProfile"),
     path('TailorDashBoard', TailorDashboard.as_view(), name="TailorDashBoard"),
     path('TailorRequestAssign', TailorRequestAndAssign.as_view(), name="TailorRequestAssign"),
-
+    path('deletedes/<int:pk>', DeleteDesign.as_view(), name="deletedes"),
+    path('editdes/<int:pk>', EditDesign.as_view(), name="editdes"),
 
 ]

@@ -28,13 +28,14 @@
        </tr>
     </table> -->
     <body>
-        <div class="test"><form action="" class="regcard">
+        <div class="test"><form action="" method="post" class="regcard">
+            {% csrf_token %}
         <h2>Tailor Profile</h2>
-        <input type="text" placeholder="Name"><br>
-        <input type="email" placeholder="email"><br>
-        <input type="tel" placeholder="Phone Number"><br>
-      <button type="submit">UPDATE</button>
-
+        <input type="text" placeholder="Name" name="Name" value="{{obj.Name}}"><br>
+        <input type="text" placeholder="Address" name="Address" value="{{obj.Address}}"><br>
+        <input type="tel" placeholder="Phone Number" name="Phone_no" value="{{obj.Phone_no}}"><br>
+        <input type="email" placeholder="email" name="Email" value="{{obj.Email}}"><br>
+      <button type="submit">UPDATE</button></form>
         </body>
 </body>
 </html>

@@ -14,26 +14,23 @@
     <table>
         <th>Design Name</th>
         <th>Design Image</th>
+        <th>Price</th>
         <th></th>
+        {% for i in obj %} 
         <tr>
-            <td></td>
-            <td></td>
+            <td>{{i.Design_name}}</td>
+            <td><img src="{{i.Design_image.url}}" alt="" height="100px" width="100px"></td>
+            <td>{{i.Price}}</td>
             <td>
-                <a href="#">Edit</a></td><br>
-                
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td>
-                      
-                        <a href="#">Delete</a></td><br></tr>
+                <a href="/editdes/{{i.id}}" >Edit</a><br>
+               <a href="/deletedes/{{i.id}}">Delete</a><br></td></tr>        {% endfor %}
+
                 <tr>
                   
-                    <td colspan="3"><a href="#">Add_New</a></td>
+                    <td colspan="4"><a href="/TailorAddDesign">Add_New</a></td>
                     
                 </tr>
         </tr>
-       
     </table>
 </body>
 </html>

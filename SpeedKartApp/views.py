@@ -42,6 +42,7 @@ class Registration(View):
         return render(request, 'Registration.html')
     
     
+    
     # ///////////////////////////////////// ADMIN/////////////////////////////////////
     
 class ViewCategory(View):
@@ -185,6 +186,7 @@ class DeliveryBoyReply(View):
 
 class SellerDeliveryBoy(View):
     def get(self, request, o_id):
+        request.session['o_id']=o_id
         obj = Delivery_Agent_Table.objects.all()
         obj1 = Order_Table.objects.get(id=o_id)
         return render(request, 'seller/assigndeliveryboy_seller.html', {'obj': obj, 'obj1' :obj1})
@@ -193,6 +195,9 @@ class AssignDeliveryBoy(View):
     def post(self, request):
         form=Assign_Tableform(request.POST)
         if form.is_valid():
+            obj1 = Order_Table.objects.get(id=request.session['o_id'])
+            obj1.Order_Status="assigned"
+            obj1.save()
             form.save()
             return redirect('sellerorder')
 
@@ -316,6 +321,32 @@ class SellerComp(View):
         c=Productrate_Table.objects.all()
         return render(request, 'seller/viewcomplaint_seller.html',{'o':c})
     
+class SellerSendComp(View):
+    def get(self, request):
+        obj=Seller_Table.objects.get(LOGIN_ID_id=request.session['login_id'])
+        return render(request, 'seller/sendcomplaint_seller.html', {'obj': obj})
+    def post(self,request):
+        print("hhhhhh")
+        c=Compadmin(request.POST)  
+        if c.is_valid():
+            c.save(commit=False)
+            c.Reply="pending"
+            c.save()
+            return HttpResponse('''<script>alert('complaint sent successfully');window.location="/sellerviewreply"</script>''')
+
+
+class SellerViewReply(View):
+    def get(self, request):
+        obj1=Complaints_Reply_Table.objects.filter(SELLER_ID__LOGIN_ID_id=request.session['login_id'])
+
+        return render(request, 'seller/viewreply_seller.html',{'obj1':obj1})
+
+
+    
+class sellercompdash(View):
+    def get(self, request):
+        return render(request, 'seller/complaintdashboard_seller.html')
+    
 class SellerOrder(View):
     def get(self, request):
         obj=Order_Table.objects.filter(PRODUCT_ID__SELLER_ID__LOGIN_ID_id=request.session['login_id'])
@@ -324,7 +355,8 @@ class SellerOrder(View):
 class SellerOtp(View):
     def get(self, request):
         return render(request, 'seller/otp_seller.html')
-    
+
+
 
 #////////////////////////////  TAILOR /////////////////////////////////////////////////////////
 
@@ -334,11 +366,47 @@ class TailorDeliveryAgent(View):
     
 class TailorDesign(View):
     def get(self, request):
-        return render(request, 'Tailor/Manage_Design.html')
+        x=Design_Table.objects.all()
+        return render(request, 'Tailor/Manage_Design.html',{'obj' : x})
+    
+class TailorAddDesign(View):
+    def get(self, request):
+        return render(request, 'Tailor/AddDesign_Tailor.html.')
+    def post(self, request):
+        c=Design_form(request.POST, request.FILES)
+        if c.is_valid():
+            c.save()
+            return HttpResponse('''<script>window.location="/TailorDesign"</script>''')
+
+class DeleteDesign(View):
+    def get(self, request, pk):
+        c = Design_Table.objects.get(pk=pk)
+        c.delete()
+        return HttpResponse('''<script>alert('deleted successfully');window.location="/TailorDesign"</script>''')
+    
+class EditDesign(View):
+    def get(self, request, pk):
+        c = Design_Table.objects.get(pk=pk)
+        return render(request, 'Tailor/editdesign_tailor.html', {'obj': c})
+    def post(self, request, pk):
+        c = Design_Table.objects.get(pk=pk)
+        c=Design_form(request.POST, request.FILES, instance=c)
+        if c.is_valid():
+            c.save()
+            return HttpResponse('''<script>window.location="/TailorDesign"</script>''')
+
     
 class TailorProfile(View):
     def get(self, request):
-        return render(request, 'Tailor/Manage_profile.html')
+        obj=Tailor_Table.objects.get(LOGIN_ID_id=request.session['login_id'])
+        return render(request, 'Tailor/Manage_profile.html',{'obj' : obj})
+    def post(self, request):
+        obj=Tailor_Table.objects.get(LOGIN_ID_id=request.session['login_id'])
+        obj=TailorProfile_form(request.POST, instance=obj)
+        if obj.is_valid():
+            obj.save()
+            return HttpResponse('''<script>alert('updated successfully');window.location="/TailorProfile"</script>''')
+    
         
 class TailorDashboard(View):
     def get(self, request):

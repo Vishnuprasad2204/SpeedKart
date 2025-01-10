@@ -1,0 +1,24 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Designs..!</title>
+    <link rel="stylesheet" href="{% static 'style.css'  %}">
+
+</head>
+<body class="test">
+    <form action="" class="CategoryCard" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+    <h1>Edit Designs!</h1>
+    <input type="text" placeholder="Design" name="Design_name" value="{{obj.Design_name}}" ><br>
+    <input type="file" placeholder="image" name="Design_image"><br>
+    <img src="{{obj.Design_image.url}}" alt="design" height="100px" width="100px"><br>
+    <input type="text" placeholder="Price" name="Price" value="{{obj.Price}}" ><br>
+    
+    <button type="submit">Edit Design</button><br>
+  </form></div>
+</body>
+</html>

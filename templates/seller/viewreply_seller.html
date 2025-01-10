@@ -11,21 +11,21 @@
 <body class="test">
 
     <table>
-        
         <th>Complaint</th>
         <th>date</th>
         <th>Reply</th>
-        <th></th>
-        {% for i in val %}
+        {% for i in obj1 %}
         <tr>
-            
-            <td>{{ i.Complaint }}</td>
-            <td>{{ i.created_at }}</td>
-            <td>{{ i.Reply }}</td>
-            <td>
-                <a href="/AdminReply/{{i.id}}">Reply</a></td><br>
-        </tr>
+
+            <td>{{i.Complaint}}</td>
+            <td>{{i.created_at}}</td>
+            <td>{{i.Reply}}</td>
         {% endfor %}
+            
+                <tr><td colspan="3"><a href="/sellersendcomp">Sent New Complaint</a></td></tr>
+        </tr>
+        
+       
     </table>
 </body>
 </html>

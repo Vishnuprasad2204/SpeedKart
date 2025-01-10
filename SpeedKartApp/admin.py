@@ -6,7 +6,6 @@ from .models import *
 
 admin.site.register(LoginTable_model)
 admin.site.register(UserTable_model)
-admin.site.register(ShopTable_model)
 admin.site.register(Review_Table)
 admin.site.register(Complaints_Reply_Table)
 admin.site.register(Delivery_Agent_Table)
