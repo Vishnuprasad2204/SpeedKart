@@ -12,22 +12,39 @@
 <body class="test">
 
     <table>
-        <th>Request</th>
+        <th>Design Name</th>
+        <th>Design image</th>
         <th>Date</th>
         <th>Place</th>
         <th>Phone</th>
         <th>Quantity</th>
-        <th>Request ID</th>
+        <th>Status</th>
         <th>Delivery Agent</th>
+        {% for i in obj %}
         <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{{ i.Design.Design_name}}</td>
+            <td><img src="{{i.Design.Design_image.url}}" alt="" height="100px" width="100px"></td>
+            <td>{{i.Date}}</td>
+            <td>{{i.USER_ID.Address}}</td>
+            <td>{{i.USER_ID.Phone_no}}</td>
+            <td>{{i.Quantity}}</td>
             <td>
-                <a href="/TailorDeliveryAgent">Assign</a></td><br></tr>
+                {% if i.Request_status == 'pending' %}
+                <a href="Accept_Request/{{i.id}}">Accept</a><br>
+                <a href="Reject_Request/{{i.id}}">Reject</a><br>
+                {% else %}
+                {{i.Request_status}}
+                {% endif %}
+            </td>
+            <td>
+                {% if i.Request_status == 'Accepted' %}
+                <a href="/TailorDeliveryAgent/{{i.id}}">Assign</a></td><br></tr>
+                {% else %}
+                <p> Not yet assigned</p>
+                {% endif %}
+            </td><br></tr>
+
+                {% endfor %}
                 
        
     </table>

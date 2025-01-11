@@ -88,7 +88,7 @@ urlpatterns = [
 
 #//////////////////////////////// TAILOR ///////////////////////////////////////////
 
-    path('TailorDeliveryAgent', TailorDeliveryAgent.as_view(), name="TailorDeliveryAgent"),
+    path('TailorDeliveryAgent/<int:req_id>', TailorDeliveryAgent.as_view(), name="TailorDeliveryAgent"),
     path('TailorDesign', TailorDesign.as_view(), name="TailorDesign"),
     path('TailorAddDesign', TailorAddDesign.as_view(), name="TailorAddDesign"),
     path('TailorProfile', TailorProfile.as_view(), name="TailorProfile"),
@@ -96,5 +96,8 @@ urlpatterns = [
     path('TailorRequestAssign', TailorRequestAndAssign.as_view(), name="TailorRequestAssign"),
     path('deletedes/<int:pk>', DeleteDesign.as_view(), name="deletedes"),
     path('editdes/<int:pk>', EditDesign.as_view(), name="editdes"),
+    path('Accept_Request/<int:r_id>', Accept_Request.as_view(), name="Accept_Request"),
+    path('Reject_Request/<int:r_id>', Reject_Request.as_view(), name="Reject_Request"),
+    
 
 ]

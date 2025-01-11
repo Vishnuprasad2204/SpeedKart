@@ -112,7 +112,7 @@ class BlockAndUnblock(View):
 
 class VerifyShop(View):
     def get(self, request):
-        obj = ShopTable_model.objects.all()
+        obj = Seller_Table.objects.all()
         return render(request, 'Admin/Verify_shop.html', {'val':obj})
 
 class CompAndSentReplay(View):
@@ -151,7 +151,17 @@ class AdminReply(View):
 
 class DeliveryComp(View):
     def get(self, request):
-        return render(request, 'Delivery boy/DeliveryBoyComplaint.html')
+        print(request.session['login_id'])
+        obj=Delivery_Agent_Table.objects.get(LOGIN_ID_id=request.session['login_id'])
+        return render(request, 'Delivery boy/DeliveryBoyComplaint.html',{'obj': obj})
+    def post(self,request):
+        print("hhhhhh")
+        c=DevComp(request.POST)  
+        if c.is_valid():
+            c.save(commit=False)
+            c.Reply="pending"
+            c.save()
+            return HttpResponse('''<script>alert('complaint sent successfully');window.location="/sellerviewreply"</script>''')        
 
 class DeliveryDashBoard(View):
     def get(self, request):
@@ -350,6 +360,7 @@ class sellercompdash(View):
 class SellerOrder(View):
     def get(self, request):
         obj=Order_Table.objects.filter(PRODUCT_ID__SELLER_ID__LOGIN_ID_id=request.session['login_id'])
+        print(request.session['login_id'])
         return render(request, 'seller/vieworder_seller.html', {'obj': obj})
     
 class SellerOtp(View):
@@ -361,8 +372,21 @@ class SellerOtp(View):
 #////////////////////////////  TAILOR /////////////////////////////////////////////////////////
 
 class TailorDeliveryAgent(View):
-    def get(self, request):
-        return render(request, 'Tailor/Delivery_Agent_Dropdown.html')
+    def get(self, request, req_id):
+        obj = Delivery_Agent_Table.objects.all()
+        request.session['req_id']=req_id
+        return render(request, 'Tailor/Delivery_Agent_Dropdown.html',{'val' : obj})
+    def post(self,request, req_id):
+        d_id=request.POST['d_id']
+        req_id=request.session['req_id']
+        obj=Delivery_Agent_Table.objects.get(id=d_id)
+        obj1=Request_Table.objects.get(id=req_id)
+        obj2=TailorAssign_Table()
+        obj2.deliveryboy=obj
+        obj2.Request=obj1
+        obj2.Request_status="assigned"
+        obj2.save()
+        return HttpResponse('''<script>alert('Delivery Agent assigned successfully');window.location="/TailorRequestAssign"</script>''')
     
 class TailorDesign(View):
     def get(self, request):
@@ -414,8 +438,23 @@ class TailorDashboard(View):
         
 class TailorRequestAndAssign(View):
     def get(self, request):
-        return render(request, 'Tailor/view_request_and_assign_delivery_agent.html')
+        obj=Request_Table.objects.filter(TAILOR_ID__LOGIN_ID_id=request.session['login_id'])
+        return render(request, 'Tailor/view_request_and_assign_delivery_agent.html', {'obj': obj})
            
+class Accept_Request(View):
+    def get(self, request, r_id):
+        obj = Request_Table.objects.get(id=r_id)
+        obj.Request_status = 'Accepted'
+        obj.save()
+        return HttpResponse('''<script> alert('Accept Successfully');window.location="/TailorRequestAssign" </script>''')
+    
+class Reject_Request(View):
+    def get(Self, request, r_id):
+        obj = Request_Table.objects.get(id=r_id)
+        obj.Request_status= 'Rejected'
+        obj.save()
+        return HttpResponse('''<script> alert('Rejected Successfully');window.location="/TailorRequestAssign" </script>''')
+
 
     
     

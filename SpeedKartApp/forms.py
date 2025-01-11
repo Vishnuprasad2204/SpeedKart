@@ -48,6 +48,11 @@ class Compadmin(ModelForm):
         model = Complaints_Reply_Table
         fields = ['SELLER_ID', 'Complaint']
 
+class DevComp(ModelForm):
+    class Meta:
+        model = Complaints_Reply_Table
+        fields = ['DELIVERY', 'Complaint']
+
 class Design_form(ModelForm):
     class Meta:
         model = Design_Table
@@ -57,4 +62,6 @@ class TailorProfile_form(ModelForm):
     class Meta:
         model = Tailor_Table
         fields = ['Name', 'Address','Phone_no', 'Email']
+
+
 
