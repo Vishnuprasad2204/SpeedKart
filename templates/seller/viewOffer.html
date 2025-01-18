@@ -1,0 +1,23 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View New Offer ..!</title>
+    <link rel="stylesheet" href="{% static 'style.css'  %}">
+
+</head>
+<body class="test">
+    <form action="" class="CategoryCard">
+    <h1>View Offer!</h1>
+   
+    <input type="text" value="{{obj.PRODUCT_ID.Product_name}}" disabled>
+    <input type="text" placeholder="Name" name="Offer_name" value="{{obj.Offer_name}}" readonly><br>
+    <img src="{{obj.PRODUCT_ID.Product_image.url}}" alt="jaba" height="100px" width="100px"><br>
+    <input type="text" value="{{obj.Offer_details}}" placeholder="Details" name="Offer_details" readonly><br>
+    <input type="text" value="{{obj.discount}}" placeholder="Discount" name="discount" readonly><br>
+  </form></div>
+</body>
+</html>

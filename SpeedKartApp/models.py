@@ -59,6 +59,7 @@ class Category_Table(models.Model):
 
 class Product_Table(models.Model):
     SELLER_ID = models.ForeignKey(Seller_Table, on_delete=models.CASCADE, null=True, blank=True)
+    CATEGORY= models.ForeignKey(Category_Table, on_delete=models.CASCADE, null=True, blank=True)
     Product_name = models.CharField(max_length=100, null=True, blank=True)
     Product_image = models.FileField(upload_to='product/',null= True,blank=True)
     Description =  models.CharField(max_length= 100, null= True, blank= True)

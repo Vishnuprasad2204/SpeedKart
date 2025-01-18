@@ -20,7 +20,7 @@ class reply_form(ModelForm):
 class Product_form(ModelForm):
     class Meta:
         model = Product_Table
-        fields = ['Product_name', 'Product_image', 'Description', 'Price', 'Quantity']
+        fields = ['Product_name', 'Product_image', 'Description', 'Price', 'Quantity','CATEGORY']
 
 class Profile_form(ModelForm):
     class Meta:
@@ -35,7 +35,7 @@ class Assign_Tableform(ModelForm):
 class AddOffer_form(ModelForm):
     class Meta:
         model = Offer_Table
-        fields = ['Offer_name', 'Offer_details','PRODUCT_ID','discount']
+        fields = ['Offer_name', 'Offer_details','discount']
 
 
 class Prorep(ModelForm):

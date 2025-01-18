@@ -18,6 +18,11 @@
     <input type="text" placeholder="Description" name="Description" required><br>
     <input type="number" placeholder="Price" name="Price" required><br>
     <input type="number" placeholder="Quantity" name="Quantity" required><br>
+    <select>
+      {% for i in obj %}
+      <option value="{{i.id}}">{{i.Category_name}}</option>
+      {% endfor %}
+    </select>
 
     <button type="submit">Add New Product</button><br>
   </form></div>

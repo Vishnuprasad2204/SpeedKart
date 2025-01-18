@@ -244,24 +244,33 @@ class Editoffer(View):
 
 
 class SellerAddOffer(View):
-    def get(self, request):
-        c=Product_Table.objects.all()
+    def get(self,request,pk):
+        c = Product_Table.objects.get(pk=pk)
+        print(c)
         return render(request, 'seller/addoffer_seller.html', {'obj': c})
     
-    def post(self, request):
+    def post(self, request, pk):
         form= AddOffer_form(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('selleroffer')
+            f=form.save(commit=False)
+            f.PRODUCT_ID=Product_Table.objects.get(id=pk)
+            f.save()
+            return redirect('sellerproduct')
     
 class SellerProduct(View):
     def get(self, request):
         x=Product_Table.objects.all()
         return render(request, 'seller/manageproduct_seller.html', {'obj' : x})
     
+class ViewOffer(View):
+    def get(self, request, pk):
+        c = Offer_Table.objects.get(pk=pk)
+        return render(request, 'seller/viewOffer.html', {'obj': c})
+    
 class SellerAddProduct(View):
     def get(self, request):
-        return render(request, 'seller/addproduct_seller.html')
+        obj=Category_Table.objects.all()
+        return render(request, 'seller/addproduct_seller.html',{'obj':obj})
     def post(self, request):
         c=Product_form(request.POST, request.FILES)
         if c.is_valid():
