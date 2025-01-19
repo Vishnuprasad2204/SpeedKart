@@ -1,0 +1,40 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Notification</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <form action="" class="compcard" method="post">
+        {% csrf_token %}
+        <h2>Send Notification</h2>
+
+        <!-- Dropdown to select an order -->
+        <label for="select">Select Order</label>
+        <select name="select" id="select" required>
+            <option value="" disabled selected>Choose an order</option>
+            {% for i in val %}
+            <option value="{{ i.id }}">
+                Order ID: {{ i.Order.id }} - {{ i.Order.Order_details }}
+            </option>
+            {% endfor %}
+        </select>
+        
+        <!-- Hidden field to capture the seller ID -->
+        <input type="hidden" name="SELLER_ID" value="{{ obj.id }}">
+
+        <!-- Text area for the notification -->
+        <div class="commentbox">
+            <label for="comments">Notification</label><br>
+            <textarea name="Complaint" id="comments" placeholder="Enter your notification message here..." required></textarea>
+        </div>
+        
+        <!-- Submit button -->
+        <button type="submit">Send Notification</button>
+    </form>
+</body>
+</html>

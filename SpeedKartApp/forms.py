@@ -9,6 +9,7 @@ class NewCategory_form(ModelForm):
         fields = ['Category_name','Description']
 
 #class Registration_form(ModelForm):
+
  #  class Meta:
   #     model = 
 
@@ -30,7 +31,7 @@ class Profile_form(ModelForm):
 class Assign_Tableform(ModelForm):
     class Meta:
         model = Assign_Table
-        fields = ['deliveryboy', 'Order']
+        fields = ['delivery_agent', 'Order']
 
 class AddOffer_form(ModelForm):
     class Meta:
@@ -63,5 +64,9 @@ class TailorProfile_form(ModelForm):
         model = Tailor_Table
         fields = ['Name', 'Address','Phone_no', 'Email']
 
+class Notification_form(ModelForm):
+    class Meta:
+        model = Notification_Table
+        fields = ['orderdata','Notification']
 
 

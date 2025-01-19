@@ -12,7 +12,7 @@
 <body class="test">
 <form action="" class="CategoryCard" method="post">
     {% csrf_token %}
-        <p>Delivery Agent:</p>
+        <p>Delivery Service:</p>
         <select id="design" name="d_id">
             {% for i in val %}
             <option value="{{i.id}}">{{ i.Name }}</option>

@@ -9,11 +9,11 @@
     <link rel="stylesheet" href="{% static 'style.css'  %}">
 </head>
 <body>
-    <div class="test"><form action="/AssignDeliveryBoy" class="regcard" method="post">
+    <div class="test"><form action="/AssignDelivery" class="regcard" method="post">
         {% csrf_token %}
         <h2>Order</h2>
         <input type="hidden" name="Order"  value="{{obj1.id}}">
-        <select id="Order" name="deliveryboy">
+        <select id="Order" name="delivery Service">
             {% for i in obj %}
             <option value="{{i.id}}">{{ i.Name }}</option>
             {% endfor %}

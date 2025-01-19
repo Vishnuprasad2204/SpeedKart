@@ -137,24 +137,21 @@ class Payment_Table(models.Model):
     User_id = models.ForeignKey(LoginTable_model, on_delete=models.CASCADE, null=True, blank=True)
     CART_ID = models.ForeignKey(Cart_Table, on_delete=models.CASCADE, null=True, blank=True)
 
-
-
-
-
     
-class Notification_Table(models.Model):
-    ORDER_ID = models.ForeignKey(Order_Table,  on_delete= models.CASCADE, null= True, blank= True) 
-    Order_name = models.CharField(max_length=100, null=True, blank=True)
-    Created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    updated_at = models.DateTimeField(auto_now= True, null=True, blank=True)
-    Notification = models.CharField(max_length=100, null=True, blank=True)
-
 class Assign_Table(models.Model):
-    deliveryboy = models.ForeignKey(Delivery_Agent_Table, on_delete= models.CASCADE, null=True, blank=True)
+    delivery_agent = models.ForeignKey(Delivery_Agent_Table, on_delete= models.CASCADE, null=True, blank=True)
     Order = models.ForeignKey(Order_Table,on_delete= models.CASCADE, null= True, blank= True)
     Order_Status = models.CharField(max_length=100, null=True, blank=True)
     Created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now= True, null=True, blank=True)
+
+class Notification_Table(models.Model):
+    ASSIGN = models.ForeignKey(Assign_Table,  on_delete= models.CASCADE, null= True, blank= True) 
+    orderdata = models.ForeignKey(Order_Table,  on_delete= models.CASCADE, null= True, blank= True) 
+    Created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now= True, null=True, blank=True)
+    Notification = models.CharField(max_length=100, null=True, blank=True)
+    status = models.CharField(max_length=100, null=True, blank=True)
 
 class TailorAssign_Table(models.Model):
     deliveryboy = models.ForeignKey(Delivery_Agent_Table, on_delete= models.CASCADE, null=True, blank=True)

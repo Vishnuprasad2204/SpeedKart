@@ -70,19 +70,19 @@ class reject_shop(View):
         obj.save()
         return HttpResponse('''<script> alert('Reject Successfully');window.location="/VerifyShop" </script>''')
     
-class approve_deliveryagent(View):
+class approve_deliveryService(View):
     def get(self, request, d_id):
         obj = LoginTable_model.objects.get(id=d_id)
         obj.type = 'DeliveryAgent'
         obj.save()
-        return HttpResponse('''<script> alert('Approve Successfully');window.location="/VerifyDeliveryAgent" </script>''')
+        return HttpResponse('''<script> alert('Approve Successfully');window.location="/VerifyDeliveryService" </script>''')
     
-class reject_deliveryagent(View):
+class reject_deliveryService(View):
     def get(Self, request, d_id):
         obj = LoginTable_model.objects.get(id=d_id)
         obj.type = 'Rejected'
         obj.save()
-        return HttpResponse('''<script> alert('Rejected Successfully');window.location="/VerifyDeliveryAgent" </script>''')
+        return HttpResponse('''<script> alert('Rejected Successfully');window.location="/VerifyDeliveryService" </script>''')
 
 
 class NewCategory(View):
@@ -120,10 +120,10 @@ class CompAndSentReplay(View):
         obj = Complaints_Reply_Table.objects.all()
         return render(request, 'Admin/ViewComplaints&sentReplay.html',{'val':obj})
 
-class AdminDeliveryAgent(View):
+class AdminDeliveryService(View):
     def get(self, request):
         obj = Delivery_Agent_Table.objects.all()
-        return render(request, 'Admin/ViewDeliveryAgent&ApproveorReject.html', {'val':obj})
+        return render(request, 'Admin/ViewDeliveryService&ApproveorReject.html', {'val':obj})
 
 class AdminReviewRating(View):
     def get(self, request):
@@ -153,55 +153,106 @@ class DeliveryComp(View):
     def get(self, request):
         print(request.session['login_id'])
         obj=Delivery_Agent_Table.objects.get(LOGIN_ID_id=request.session['login_id'])
-        return render(request, 'Delivery boy/DeliveryBoyComplaint.html',{'obj': obj})
+        return render(request, 'DeliveryService/DeliveryComplaint.html',{'obj': obj})
     def post(self,request):
         print("hhhhhh")
         c=DevComp(request.POST)  
         if c.is_valid():
-            c.save(commit=False)
-            c.Reply="pending"
-            c.save()
-            return HttpResponse('''<script>alert('complaint sent successfully');window.location="/sellerviewreply"</script>''')        
+            f=c.save(commit=False)
+            obj=Delivery_Agent_Table.objects.get(LOGIN_ID_id=request.session['login_id'])
+            f.DELIVERY=obj
+            f.Reply="pending"
+            f.save()
+            return HttpResponse('''<script>alert('complaint sent successfully');window.location="/DeliveryViewComplaint"</script>''')        
 
 class DeliveryDashBoard(View):
     def get(self, request):
-        return render(request, 'Delivery boy/DeliveryBoyDashBoard.html')
+        return render(request, 'DeliveryService/DeliveryDashBoard.html')
 
 class DeliveryViewComp(View):
     def get(self, request):
-        return render(request, 'Delivery boy/DeliveryBoySentComplaint&ViewReplay.html')
+        obj=Complaints_Reply_Table.objects.filter(DELIVERY__LOGIN_ID_id=request.session['login_id'])
+        return render(request, 'DeliveryService/DeliverySentComplaint&ViewReplay.html',{'obj':obj})
 
 class DeliveryReviewRating(View):
     def get(self, request):
-        return render(request, 'Delivery boy/DeliveryBoyReviewRating.html')
+        return render(request, 'DeliveryService/DeliveryReviewRating.html')
+    
+class DeliveryUserNotification(View):
+    def get(self, request):
+        # Ensure session contains 'login_id'
+        if 'login_id' not in request.session:
+            return HttpResponse('''<script>alert('Session expired. Please log in again.');window.location="/login"</script>''')
+
+        id = request.session['login_id']
+        try:
+            # Fetch the logged-in delivery agent
+            delid = Delivery_Agent_Table.objects.get(LOGIN_ID=id)
+        except Delivery_Agent_Table.DoesNotExist:
+            return HttpResponse('''<script>alert('Delivery agent not found.');window.location="/login"</script>''')
+
+        # Fetch assignments related to the logged-in delivery agent
+        obj = Assign_Table.objects.filter(delivery_agent=delid.id).select_related('Order')
+        return render(request, 'DeliveryService/DeliveryUserNotification.html', {'val': obj, 'obj': delid})
+
+    def post(self, request):
+        assign_id = request.POST.get('select')  # Fetch the selected assign ID
+        notification_text = request.POST.get('Complaint')  # Fetch the notification text
+
+        if assign_id and notification_text:
+            try:
+                # Fetch the corresponding Assign_Table object
+                assign_obj = Assign_Table.objects.get(id=assign_id)
+                
+                # Fetch the related Order_Table object
+                order_obj = assign_obj.Order
+
+                # Create a new notification, including the orderdata field
+                Notification_Table.objects.create(
+                    ASSIGN=assign_obj,
+                    orderdata=order_obj,
+                    Notification=notification_text,
+                    status='Pending'
+                )
+                return HttpResponse('''<script>alert('Notification sent successfully');window.location="/DeliveryNotification"</script>''')
+            except Assign_Table.DoesNotExist:
+                return HttpResponse('''<script>alert('Invalid assignment ID.');window.location="/DeliveryNotification"</script>''')
+        else:
+            return HttpResponse('''<script>alert('All fields are required.');window.location="/DeliveryNotification"</script>''')
     
 class DeliveryNotification(View):
     def get(self, request):
-        return render(request, 'Delivery boy/DeliveryBoySentNotification.html')
+        # Fetch all notifications from the Notification_Table
+        notifications = Notification_Table.objects.select_related('orderdata', 'ASSIGN').all()
+        return render(request, 'DeliveryService/DeliverySentNotification.html', {'notifications': notifications})
 
 class DeliveryUpdateOrder(View):
     def get(self, request):
-        return render(request, 'Delivery boy/DeliveryBoyUpdateOrder.html')
+        return render(request, 'DeliveryService/DeliveryUpdateOrder.html')
     
 class DeliveryViewOrder(View):
     def get(self, request):
-        return render(request, 'Delivery boy/DeliveryBoyViewOrder.html')
+        return render(request, 'DeliveryService/DeliveryViewOrder.html')
     
-class DeliveryBoyReply(View):
+class DeliveryReply(View):
     def get(self, request):
-        return render(request, 'Delivery boy/DeliveryBoyReply.html')
+        return render(request, 'DeliveryService/DeliveryReply.html')
+    
+
+
+
     
 
 #//////////////////////////////// SELLER  /////////////////////////////////////
 
-class SellerDeliveryBoy(View):
+class SellerDelivery(View):
     def get(self, request, o_id):
         request.session['o_id']=o_id
         obj = Delivery_Agent_Table.objects.all()
         obj1 = Order_Table.objects.get(id=o_id)
-        return render(request, 'seller/assigndeliveryboy_seller.html', {'obj': obj, 'obj1' :obj1})
+        return render(request, 'seller/assigndelivery_seller.html', {'obj': obj, 'obj1' :obj1})
 
-class AssignDeliveryBoy(View):
+class AssignDelivery(View):
     def post(self, request):
         form=Assign_Tableform(request.POST)
         if form.is_valid():
@@ -380,11 +431,11 @@ class SellerOtp(View):
 
 #////////////////////////////  TAILOR /////////////////////////////////////////////////////////
 
-class TailorDeliveryAgent(View):
+class TailorDeliveryService(View):
     def get(self, request, req_id):
         obj = Delivery_Agent_Table.objects.all()
         request.session['req_id']=req_id
-        return render(request, 'Tailor/Delivery_Agent_Dropdown.html',{'val' : obj})
+        return render(request, 'Tailor/DeliveryServiceDropdown.html',{'val' : obj})
     def post(self,request, req_id):
         d_id=request.POST['d_id']
         req_id=request.session['req_id']
@@ -395,7 +446,7 @@ class TailorDeliveryAgent(View):
         obj2.Request=obj1
         obj2.Request_status="assigned"
         obj2.save()
-        return HttpResponse('''<script>alert('Delivery Agent assigned successfully');window.location="/TailorRequestAssign"</script>''')
+        return HttpResponse('''<script>alert('Delivery Service assigned successfully');window.location="/TailorRequestAssign"</script>''')
     
 class TailorDesign(View):
     def get(self, request):
@@ -448,7 +499,7 @@ class TailorDashboard(View):
 class TailorRequestAndAssign(View):
     def get(self, request):
         obj=Request_Table.objects.filter(TAILOR_ID__LOGIN_ID_id=request.session['login_id'])
-        return render(request, 'Tailor/view_request_and_assign_delivery_agent.html', {'obj': obj})
+        return render(request, 'Tailor/view_request_and_assign_delivery_Service.html', {'obj': obj})
            
 class Accept_Request(View):
     def get(self, request, r_id):

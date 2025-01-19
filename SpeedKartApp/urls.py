@@ -39,29 +39,30 @@ urlpatterns = [
     path('accept_shop/<int:s_id>', accept_shop.as_view(), name="accept_shop"),
     path('reject_shop/<int:s_id>', reject_shop.as_view(), name="reject_shop"),
     path('VerifyComplaint', CompAndSentReplay.as_view(), name="VerifyComplaint"),
-    path('VerifyDeliveryAgent', AdminDeliveryAgent.as_view(), name="ViewDeliveryAgent"),
-    path('approve_deliveryagent/<int:d_id>', approve_deliveryagent.as_view(), name="approve_deliveryagent"),
-    path('reject_deliveryagent/<int:d_id>', reject_deliveryagent.as_view(), name="reject_deliveryagent"),
+    path('VerifyDeliveryService', AdminDeliveryService.as_view(), name="ViewDeliveryService"),
+    path('approve_deliveryService/<int:d_id>', approve_deliveryService.as_view(), name="approve_deliveryService"),
+    path('reject_deliveryService/<int:d_id>', reject_deliveryService.as_view(), name="reject_deliveryService"),
     path('AdminReviewRating', AdminReviewRating.as_view(), name="AdminReviewRating"),
     path('AdminReply/<int:id>', AdminReply.as_view(), name="AdminReply"),
 
 
 
-    # ///////////////////////////////// DELIVERY BOY ///////////////////////////////////////////
+    # ///////////////////////////////// DELIVERY Service ///////////////////////////////////////////
 
 
     path('DeliveryComplaint', DeliveryComp.as_view(), name="DeliveryComplaint"),
     path('deliverydash', DeliveryDashBoard.as_view(), name="DeliveryDashBoard"),
     path('DeliveryViewComplaint', DeliveryViewComp.as_view(), name="DeliveryViewComplaint"),
-    path('DeliveryBoyReviewRating', DeliveryReviewRating.as_view(), name="DeliveryBoyReviewRating"),
+    path('DeliveryReviewRating', DeliveryReviewRating.as_view(), name="DeliveryReviewRating"),
     path('DeliveryNotification', DeliveryNotification.as_view(), name="DeliveryNotification"),
-    path('DeliveryBoyUpdateOrder', DeliveryUpdateOrder.as_view(), name="DeliveryBoyUpdateOrder"),
-    path('DeliveryBoyViewOrder', DeliveryViewOrder.as_view(), name="DeliveryBoyViewOrder"),
-    path('DeliveryBoyReply', DeliveryBoyReply.as_view(),name="DeliveryBoyReply"),
+    path('DeliveryUpdateOrder', DeliveryUpdateOrder.as_view(), name="DeliveryUpdateOrder"),
+    path('DeliveryViewOrder', DeliveryViewOrder.as_view(), name="DeliveryViewOrder"),
+    path('DeliveryReply', DeliveryReply.as_view(),name="DeliveryReply"),
+    path('DeliveryUserNotification' , DeliveryUserNotification.as_view(), name="DeliveryUserNotification"),
 
 #//////////////////////////////// SELLER ///////////////////////////////////////////
 
-    path('assigndeliveryboyseller/<int:o_id>', SellerDeliveryBoy.as_view(), name="assigndeliveryboyseller"),
+    path('assigndeliveryseller/<int:o_id>', SellerDelivery.as_view(), name="assigndeliveryseller"),
     path('sellerchangepassword', SellerChangePassword.as_view(), name="sellerchangepassword"),
     path('sellerconfirmpassword', SellerConfirmPassword.as_view(), name="sellerconfirmpassword"),
     path('selleroffer', SellerOffer.as_view(), name="selleroffer"),
@@ -84,12 +85,12 @@ urlpatterns = [
     path('sellercompdash', sellercompdash.as_view(), name="sellercompdash"),
     path('sellerorder', SellerOrder.as_view(), name="sellerorder"),
     path('sellerotp', SellerOtp.as_view(), name="sellerotp"),
-    path('AssignDeliveryBoy',AssignDeliveryBoy.as_view(),name='AssignDeliveryBoy'),
+    path('AssignDelivery',AssignDelivery.as_view(),name='AssignDelivery'),
 
 
 #//////////////////////////////// TAILOR ///////////////////////////////////////////
 
-    path('TailorDeliveryAgent/<int:req_id>', TailorDeliveryAgent.as_view(), name="TailorDeliveryAgent"),
+    path('TailorDeliveryService/<int:req_id>', TailorDeliveryService.as_view(), name="TailorDeliveryService"),
     path('TailorDesign', TailorDesign.as_view(), name="TailorDesign"),
     path('TailorAddDesign', TailorAddDesign.as_view(), name="TailorAddDesign"),
     path('TailorProfile', TailorProfile.as_view(), name="TailorProfile"),

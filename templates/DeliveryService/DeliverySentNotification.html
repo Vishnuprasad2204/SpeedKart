@@ -1,0 +1,55 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body class="test">
+    <h1>Notifications</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+              
+                <th>Date</th>
+                <th>Time</th>
+                <th>Notification</th>
+             
+            </tr>
+        </thead>
+        <tbody>
+            {% for notification in notifications %}
+            <tr>
+                <!-- Display Order ID -->
+                <td>{{ notification.orderdata.id }}</td>
+
+                <!-- Display Order Name -->
+                
+
+                <!-- Display Date -->
+                <td>{{ notification.Created_at.date }}</td>
+
+                <!-- Display Time -->
+                <td>{{ notification.Created_at.time }}</td>
+
+                <!-- Display Notification Content -->
+                <td>{{ notification.Notification }}</td>
+
+                <!-- Display Status -->
+                
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6">No notifications available</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="/DeliveryUserNotification" class="btn btn-outline-danger">Back to Add Notifications</a>
+</body>
+</html>
