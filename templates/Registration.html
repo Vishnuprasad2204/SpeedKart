@@ -11,18 +11,19 @@
 </head>
 <body>
     <div class="test">
-        <form action="" class="deliveryboyRegcard">
+        <form action="" class="deliveryboyRegcard" method="post">
+            {% csrf_token %}
         <h2>Registration</h2>
-        <select id="registration" name="registration">
+        <select id="registration" name="type">
             <option value="Seller">Seller</option>
             <option value="Tailor">Tailor </option>
             <option value="DeliveryAgent">DeliveryBoy</option>
         </select><br>
-        <input type="text" placeholder="Username"><br>
-        <input type="text" placeholder="Address"><br>
-        <input type="email" placeholder="email"><br>
-        <input type="tel" placeholder="Phone Number"><br>
-        <input type="password" placeholder="password"><br>
+        <input type="text" placeholder="Username" name="Name" required><br>
+        <input type="text" placeholder="Address" name="Address" required><br>
+        <input type="email" placeholder="email" name="Email" required><br>
+        <input type="tel" placeholder="Phone Number" name="Phone_no" required><br>
+        <input type="password" placeholder="password" name="password" required><br>
         <p>Already Have an Account?<a href="/Login">Login Now</a></p>
         <button type="submit">REGISTER</button>
         </form>

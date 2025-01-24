@@ -1,3 +1,4 @@
+import random
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.views import View
@@ -37,11 +38,54 @@ class Logout(View):
 
     #//////////////////////////////////REGISTRATION///////////////////////////////
 
+def generate_otp():
+    """Generate a 4-digit OTP."""
+    return str(random.randint(1000, 9999)) 
+
+from django.core.mail import send_mail
+from django.contrib import messages
+
+
+
 class Registration(View):
     def get(self, request):
         return render(request, 'Registration.html')
-    
-    
+    def post(self, request):
+        type = request.POST['type']
+
+        if type == "Seller":
+            form = SellerRegistrationForm(request.POST)
+            if form.is_valid():
+                try:
+                    f = form.save(commit=False)
+                    f.LOGIN_ID = LoginTable_model.objects.create(username=request.POST['Name'], password=request.POST['password'], type='pending')
+                    f.LOGIN_ID.save()
+                    f.save()
+                    return redirect('/')  
+                except LoginTable_model.DoesNotExist:
+                    form.add_error(None, "FAILED")
+        if type == "Tailor":
+            form = TailorProfile_form(request.POST)
+            if form.is_valid():
+                try:
+                    f = form.save(commit=False)
+                    f.LOGIN_ID = LoginTable_model.objects.create(username=request.POST['Name'], password=request.POST['password'], type='Tailor')
+                    f.LOGIN_ID.save()
+                    f.save()
+                    return redirect('/')  
+                except LoginTable_model.DoesNotExist:
+                    form.add_error(None, "FAILED")
+        if type == "DeliveryAgent":
+            form = DeliveryRegistrationForm(request.POST)
+            if form.is_valid():
+                try:
+                    f = form.save(commit=False)
+                    f.LOGIN_ID = LoginTable_model.objects.create(username=request.POST['Name'], password=request.POST['password'], type='pending')
+                    f.LOGIN_ID.save()
+                    f.save()
+                    return redirect('/')  
+                except LoginTable_model.DoesNotExist:
+                    form.add_error(None, "FAILED")
     
     # ///////////////////////////////////// ADMIN/////////////////////////////////////
     
@@ -176,7 +220,8 @@ class DeliveryViewComp(View):
 
 class DeliveryReviewRating(View):
     def get(self, request):
-        return render(request, 'DeliveryService/DeliveryReviewRating.html')
+        obj = ReviewDelivery.objects.all()
+        return render(request, 'DeliveryService/DeliveryReviewRating.html',{'val':obj})
     
 class DeliveryUserNotification(View):
     def get(self, request):
@@ -226,13 +271,76 @@ class DeliveryNotification(View):
         notifications = Notification_Table.objects.select_related('orderdata', 'ASSIGN').all()
         return render(request, 'DeliveryService/DeliverySentNotification.html', {'notifications': notifications})
 
+from django.core.mail import send_mail
+from django.shortcuts import redirect
+from django.contrib import messages
+
 class DeliveryUpdateOrder(View):
-    def get(self, request):
-        return render(request, 'DeliveryService/DeliveryUpdateOrder.html')
-    
+    def get(self, request, a_id):
+        obj = Assign_Table.objects.get(id=a_id)
+        return render(request, 'DeliveryService/DeliveryUpdateOrder.html', {'obj': obj})
+
+    def post(self, request, a_id):
+        obj = Assign_Table.objects.get(id=a_id)
+        obj1 = Order_Table.objects.get(id=obj.Order.id)
+        status1 = request.POST['status']
+        obj1.Order_Status = status1
+        obj1.save()
+        obj.Order_Status = status1
+        obj.save()
+
+        print("Updated Order Status:", status1)
+        if str(status1) == "notavailable":
+            print("%%%%%%%%%%%%%%%%%5----inside")
+            print("Status is 'notavailable'. Processing email notification.")
+            email = obj1.User.Email  # Replace `User.Email` with the actual field name
+            print("Recipient email:", email)
+
+            if email:
+                try:
+                    send_mail(
+                        'User Not Available',  # Subject
+                        'The delivery agent reported the user as not available.',  # Message
+                        'vishnuprasad2204@gmail.com',  # From email
+                        [email],  # Recipient list (should be a list)
+                    )
+                    messages.success(request, f'Email sent to {email}.')
+                    return redirect('Verify_otp')  # Adjust redirection as needed
+                except Exception as e:
+                    messages.error(request, f'Failed to send email: {e}')
+            else:
+                messages.error(request, 'Invalid email address.')
+        else:
+            print("Order status updated successfully.")
+            return HttpResponse(
+                '''<script>alert('Updated Successfully.');window.location="/DeliveryViewOrder"</script>'''
+            )
+
+        return HttpResponse(
+            '''<script>alert('Updated Successfully.');window.location="/DeliveryViewOrder"</script>'''
+        )
+class DeliveryUpdateRequest(View):
+    def get(self, request,ta_id):
+        obj = TailorAssign_Table.objects.get(id=ta_id)
+        return render(request, 'DeliveryService/DeliveryUpdateRequest.html', {'obj': obj})
+    def post(self, request, ta_id):
+        obj = TailorAssign_Table.objects.get(id=ta_id)
+        obj1 = Request_Table.objects.get(id=obj.Request.id)
+        status = request.POST['status']
+        obj1.Request_status=status
+        obj1.save()
+        obj.Request_status=status
+        obj.save()
+        return HttpResponse('''<script>alert('Updated Successfully.');window.location="/DeliveryViewOrder"</script>''')
+
+
+
+
 class DeliveryViewOrder(View):
     def get(self, request):
-        return render(request, 'DeliveryService/DeliveryViewOrder.html')
+        obj=Assign_Table.objects.filter(delivery_agent__LOGIN_ID=request.session['login_id'])
+        obj1=TailorAssign_Table.objects.filter(deliveryboy__LOGIN_ID=request.session['login_id'])
+        return render(request, 'DeliveryService/DeliveryViewOrder.html',{'val':obj , 'val1':obj1})
     
 class DeliveryReply(View):
     def get(self, request):

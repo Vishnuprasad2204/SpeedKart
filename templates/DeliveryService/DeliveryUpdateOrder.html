@@ -10,11 +10,17 @@
 
 </head>
 <body class="test">
-    <form action="" class="CategoryCard">
+    <form action="" class="CategoryCard" method="post">
+      {% csrf_token %}
     <h1>Update Order Status</h1>
-    <input type="text" placeholder="Order ID"><br>
-    <input type="text" placeholder="Customer Name"><br>
-    <button type="submit">View Status</button><br>
+    <input type="text" placeholder="Order ID" value="{{ obj.Order.id }}" disabled><br>
+    <select id="status" name="status">
+      <option value="Pending">Pending</option>
+      <option value="Shipped">Shipped</option>
+      <option value="Delivered">Delivered</option>
+      <option value="notavailable ">not available</option>
+    </select>
+    <button type="submit">Update</button><br>
   </form></div>
 </body>
 </html>

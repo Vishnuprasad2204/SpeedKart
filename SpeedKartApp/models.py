@@ -159,3 +159,12 @@ class TailorAssign_Table(models.Model):
     Request_status = models.CharField(max_length=100, null=True, blank=True)
     Created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now= True, null=True, blank=True)
+
+
+class ReviewDelivery(models.Model):
+    USER_ID = models.ForeignKey(UserTable_model, on_delete=models.CASCADE, null=True, blank=True)
+    DeliveryAgency = models.ForeignKey(Delivery_Agent_Table, on_delete=models.CASCADE, null=True, blank=True)
+    Review = models.CharField(max_length=100, null=True, blank=True)
+    Rating = models.IntegerField(null=True, blank=True)
+    Created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now= True, null=True, blank=True)

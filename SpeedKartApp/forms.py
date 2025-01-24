@@ -8,10 +8,20 @@ class NewCategory_form(ModelForm):
         model = Category_Table
         fields = ['Category_name','Description']
 
-#class Registration_form(ModelForm):
+class SellerRegistrationForm(ModelForm):
+  class Meta:
+      model = Seller_Table
+      fields = ['Name', 'Address', 'Phone_no', 'Email']
 
- #  class Meta:
-  #     model = 
+class TailorProfile_form(ModelForm):
+    class Meta:
+        model = Tailor_Table
+        fields = ['Name', 'Address','Phone_no', 'Email']
+        
+class DeliveryRegistrationForm(ModelForm):
+  class Meta:
+      model = Delivery_Agent_Table
+      fields = ['Name', 'Address', 'Phone_no', 'Email']
 
 class reply_form(ModelForm):
     class Meta:
@@ -59,10 +69,6 @@ class Design_form(ModelForm):
         model = Design_Table
         fields = ['Design_name', 'Design_image','Price']
 
-class TailorProfile_form(ModelForm):
-    class Meta:
-        model = Tailor_Table
-        fields = ['Name', 'Address','Phone_no', 'Email']
 
 class Notification_form(ModelForm):
     class Meta:

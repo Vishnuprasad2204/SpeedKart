@@ -15,13 +15,14 @@
         <th>Date</th>
         <th>Review</th>
         <th>Rating</th>
+        {% for i in val %}
         <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{{ i.USER_ID.Name }}</td>           
+            <td>{{ i.Created_at }}</td>
+            <td>{{ i.Review }}</td>
+            <td>{{ i.Rating }}</td>
         </tr>
-       
+       {% endfor %}
     </table>
 </body>
 </html>

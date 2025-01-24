@@ -1,0 +1,26 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Catagories..!</title>
+    <link rel="stylesheet" href="{% static 'style.css'  %}">
+
+</head>
+<body class="test">
+    <form action="" class="CategoryCard" method="post">
+      {% csrf_token %}
+    <h1>Update Request Status</h1>
+    <input type="text" placeholder="Request ID" value="{{ obj.Request.id }}" disabled><br>
+    <select id="status" name="status">
+      <option value="Pending">Pending</option>
+      <option value="Shipped">Shipped</option>
+      <option value="Delivered">Delivered</option>
+      <option value="not available">not available</option>
+    </select>
+    <button type="submit">Update</button><br>
+  </form></div>
+</body>
+</html>
