@@ -69,7 +69,7 @@ class Registration(View):
             if form.is_valid():
                 try:
                     f = form.save(commit=False)
-                    f.LOGIN_ID = LoginTable_model.objects.create(username=request.POST['Name'], password=request.POST['password'], type='Tailor')
+                    f.LOGIN_ID = LoginTable_model.objects.create(username=request.POST['Name'], password=request.POST['password'], type='pending')
                     f.LOGIN_ID.save()
                     f.save()
                     return redirect('/')  
@@ -86,6 +86,72 @@ class Registration(View):
                     return redirect('/')  
                 except LoginTable_model.DoesNotExist:
                     form.add_error(None, "FAILED")
+
+    #//////////////////////////////////////FORGOT PASSWORD/////////////////////////////
+
+class ForgetPassword(View):
+    def get(self, request):
+        return render(request, 'Forgotpassword.html')
+    def post(self, request):
+        user = request.POST['Name']
+        email = request.POST['Email']
+
+        try:
+            obj = Tailor_Table.objects.get(Email=email, Name=user)
+            print("------obj1-------->obj")
+            login_obj = LoginTable_model.objects.get(id=obj.LOGIN_ID.id)
+            try:
+                send_mail(
+                    'Password',  # Subject
+                    'Your Account Password is:',login_obj.password,  # Message
+                    'vishnuprasad2204@gmail.com',  # From email
+                    [email],  # Recipient list (should be a list)
+                )
+                messages.success(request, f'Email sent to {email}.')
+                return HttpResponse('''<script> alert('mail sent Successfully');window.location="/Login" </script>''')
+            except Exception as e:
+                messages.error(request, f'Failed to send email: {e}')
+            return HttpResponse("User obj found")
+
+        except:
+            try:
+                obj1 = Seller_Table.objects.get(Email=email, Name=user)
+                print("------obj2-------->obj")
+                login_obj1 = LoginTable_model.objects.get(id=obj1.LOGIN_ID.id)
+                try:
+                    send_mail(
+                        'Password',  # Subject
+                        'Your Account Password is:',login_obj1.password,  # Message
+                        'vishnuprasad2204@gmail.com',  # From email
+                        [email],  # Recipient list (should be a list)
+                    )
+                    messages.success(request, f'Email sent to {email}.')
+                    return HttpResponse('''<script> alert('mail sent Successfully');window.location="/Login" </script>''')
+                except Exception as e:
+                    messages.error(request, f'Failed to send email: {e}')
+                    return HttpResponse('''<script> alert('error');window.location="/" </script>''')
+
+
+            except:
+                try:
+                    obj2 = Delivery_Agent_Table.objects.get(Email=email, Name=user)
+                    login_obj2 = LoginTable_model.objects.get(id=obj2.LOGIN_ID.id)
+                    try:
+                        send_mail(
+                            'Password',  # Subject
+                            'Your Account Password is:',login_obj2.password,  # Message
+                            'vishnuprasad2204@gmail.com',  # From email
+                            [email],  # Recipient list (should be a list)
+                        )
+                        messages.success(request, f'Email sent to {email}.')
+                        return HttpResponse('''<script> alert('mail sent Successfully');window.location="/Login" </script>''')
+                    except Exception as e:
+                        messages.error(request, f'Failed to send email: {e}')
+
+                except:
+                        return HttpResponse('''<script> alert('email not valid');window.location="/" </script>''')
+
+                    
     
     # ///////////////////////////////////// ADMIN/////////////////////////////////////
     
@@ -105,6 +171,25 @@ class accept_shop(View):
         obj = LoginTable_model.objects.get(id=s_id)
         obj.type = 'Seller'
         obj.save()
+        obj1 = Seller_Table.objects.get(LOGIN_ID_id=obj.id)
+        print("Status is 'notavailable'. Processing email notification.")
+        email = obj1.Email  # Replace `User.Email` with the actual field name
+        print("Recipient email:", email)
+
+        if email:
+            try:
+                send_mail(
+                    'Successfully Approved',  # Subject
+                    'Your registration in Modistra as Seller has Successfully approved.',  # Message
+                    'vishnuprasad2204@gmail.com',  # From email
+                    [email],  # Recipient list (should be a list)
+                )
+                messages.success(request, f'Email sent to {email}.')
+                return redirect('Verify_otp')  # Adjust redirection as needed
+            except Exception as e:
+                messages.error(request, f'Failed to send email: {e}')
+        else:
+            messages.error(request, 'Invalid email address.')
         return HttpResponse('''<script> alert('Accept Successfully');window.location="/VerifyShop" </script>''')
     
 class reject_shop(View):
@@ -112,6 +197,25 @@ class reject_shop(View):
         obj = LoginTable_model.objects.get(id=s_id)
         obj.type = 'Rejected'
         obj.save()
+        obj1 = Seller_Table.objects.get(LOGIN_ID_id=obj.id)
+        print("Status is 'notavailable'. Processing email notification.")
+        email = obj1.Email  # Replace `User.Email` with the actual field name
+        print("Recipient email:", email)
+
+        if email:
+            try:
+                send_mail(
+                    'You are Rejected',  # Subject
+                    'Your registration in Modistra as Seller has Rejected.',  # Message
+                    'vishnuprasad2204@gmail.com',  # From email
+                    [email],  # Recipient list (should be a list)
+                )
+                messages.success(request, f'Email sent to {email}.')
+                return redirect('Verify_otp')  # Adjust redirection as needed
+            except Exception as e:
+                messages.error(request, f'Failed to send email: {e}')
+        else:
+            messages.error(request, 'Invalid email address.')
         return HttpResponse('''<script> alert('Reject Successfully');window.location="/VerifyShop" </script>''')
     
 class approve_deliveryService(View):
@@ -119,6 +223,25 @@ class approve_deliveryService(View):
         obj = LoginTable_model.objects.get(id=d_id)
         obj.type = 'DeliveryAgent'
         obj.save()
+        obj1 = Delivery_Agent_Table.objects.get(LOGIN_ID_id=obj.id)
+        print("Status is 'notavailable'. Processing email notification.")
+        email = obj1.Email  # Replace `User.Email` with the actual field name
+        print("Recipient email:", email)
+
+        if email:
+            try:
+                send_mail(
+                    'Successfully Approved',  # Subject
+                    'Your registration in Modistra as Delivery Service has Successfully approved.',  # Message
+                    'vishnuprasad2204@gmail.com',  # From email
+                    [email],  # Recipient list (should be a list)
+                )
+                messages.success(request, f'Email sent to {email}.')
+                return redirect('Verify_otp')  # Adjust redirection as needed
+            except Exception as e:
+                messages.error(request, f'Failed to send email: {e}')
+        else:
+            messages.error(request, 'Invalid email address.')
         return HttpResponse('''<script> alert('Approve Successfully');window.location="/VerifyDeliveryService" </script>''')
     
 class reject_deliveryService(View):
@@ -126,8 +249,90 @@ class reject_deliveryService(View):
         obj = LoginTable_model.objects.get(id=d_id)
         obj.type = 'Rejected'
         obj.save()
+        obj1 = Delivery_Agent_Table.objects.get(LOGIN_ID_id=obj.id)
+        print("Status is 'notavailable'. Processing email notification.")
+        email = obj1.Email  # Replace `User.Email` with the actual field name
+        print("Recipient email:", email)
+
+        if email:
+            try:
+                send_mail(
+                    'You are Rejected',  # Subject
+                    'Your registration in Modistra as Delivery Service has Rejected.',  # Message
+                    'vishnuprasad2204@gmail.com',  # From email
+                    [email],  # Recipient list (should be a list)
+                )
+                messages.success(request, f'Email sent to {email}.')
+                return redirect('Verify_otp')  # Adjust redirection as needed
+            except Exception as e:
+                messages.error(request, f'Failed to send email: {e}')
+        else:
+            messages.error(request, 'Invalid email address.')
         return HttpResponse('''<script> alert('Rejected Successfully');window.location="/VerifyDeliveryService" </script>''')
 
+class VerifyTailor(View):
+    def get(self, request):
+        obj = Tailor_Table.objects.all()
+        return render(request, 'Admin/ViewTailor&ApproveorReject.html', {'val':obj})
+
+class approveTailor(View):
+    def get(self, request, t_id):
+        obj=LoginTable_model.objects.get(id=t_id)
+        obj.type = 'Tailor'
+        obj.save()
+        obj1 = Tailor_Table.objects.get(LOGIN_ID_id=obj.id)
+        print("Status is 'notavailable'. Processing email notification.")
+        email = obj1.Email  # Replace `User.Email` with the actual field name
+        print("Recipient email:", email)
+
+        if email:
+            try:
+                send_mail(
+                    'Successfully Approved',  # Subject
+                    'Your registration in Modistra as Tailor has Successfully approved.',  # Message
+                    'vishnuprasad2204@gmail.com',  # From email
+                    [email],  # Recipient list (should be a list)
+                )
+                messages.success(request, f'Email sent to {email}.')
+                return redirect('Verify_otp')  # Adjust redirection as needed
+            except Exception as e:
+                messages.error(request, f'Failed to send email: {e}')
+        else:
+            messages.error(request, 'Invalid email address.')
+        return HttpResponse('''<script> alert('Approved Successfully');window.location="/VerifyTailor" </script>''')
+
+
+
+
+
+
+       
+class rejectTailor(View):
+    def get(self, request, t_id):
+        obj=LoginTable_model.objects.get(id=t_id)
+        obj.type = 'Rejected'
+        obj.save()
+        obj1 = Tailor_Table.objects.get(LOGIN_ID_id=obj.id)
+        print("Status is 'notavailable'. Processing email notification.")
+        email = obj1.Email  # Replace `User.Email` with the actual field name
+        print("Recipient email:", email)
+
+        if email:
+            try:
+                send_mail(
+                    'You are Rejected',  # Subject
+                    'Your registration in Modistra as Tailor has Rejected.',  # Message
+                    'vishnuprasad2204@gmail.com',  # From email
+                    [email],  # Recipient list (should be a list)
+                )
+                messages.success(request, f'Email sent to {email}.')
+                return redirect('Verify_otp')  # Adjust redirection as needed
+            except Exception as e:
+                messages.error(request, f'Failed to send email: {e}')
+        else:
+            messages.error(request, 'Invalid email address.')
+        return HttpResponse('''<script> alert('Rejected Successfully');window.location="/VerifyTailor" </script>''')
+       
 
 class NewCategory(View):
     def get(self, request):
@@ -284,13 +489,15 @@ class DeliveryUpdateOrder(View):
         obj = Assign_Table.objects.get(id=a_id)
         obj1 = Order_Table.objects.get(id=obj.Order.id)
         status1 = request.POST['status']
+        print(status1,"fffffffffffff")
         obj1.Order_Status = status1
         obj1.save()
         obj.Order_Status = status1
         obj.save()
-
+        c="notavailable"
         print("Updated Order Status:", status1)
-        if str(status1) == "notavailable":
+        if status1.strip() == c.strip():
+
             print("%%%%%%%%%%%%%%%%%5----inside")
             print("Status is 'notavailable'. Processing email notification.")
             email = obj1.User.Email  # Replace `User.Email` with the actual field name
@@ -300,7 +507,7 @@ class DeliveryUpdateOrder(View):
                 try:
                     send_mail(
                         'User Not Available',  # Subject
-                        'The delivery agent reported the user as not available.',  # Message
+                        'The delivery agent reported the user as not available. Please contact the user to confirm the delivery.',  # Message
                         'vishnuprasad2204@gmail.com',  # From email
                         [email],  # Recipient list (should be a list)
                     )
@@ -327,10 +534,34 @@ class DeliveryUpdateRequest(View):
         obj = TailorAssign_Table.objects.get(id=ta_id)
         obj1 = Request_Table.objects.get(id=obj.Request.id)
         status = request.POST['status']
+        print(status,"ffffffgggggggff")
         obj1.Request_status=status
         obj1.save()
         obj.Request_status=status
         obj.save()
+        c="notavailable"
+        print("Updated Request Status:", status)
+        if status.strip() == c.strip():
+
+            print("%%%%%%%%%%%%%%%%%5----inside")
+            print("Status is 'notavailable'. Processing email notification.")
+            email = obj1.USER_ID.Email  # Replace `User.Email` with the actual field name
+            print("Recipient email:", email)
+
+            if email:
+                try:
+                    send_mail(
+                        'User Not Available',  # Subject
+                        'The delivery agent reported the user as not available. Please contact the user to confirm the delivery.',  # Message
+                        'vishnuprasad2204@gmail.com',  # From email
+                        [email],  # Recipient list (should be a list)
+                    )
+                    messages.success(request, f'Email sent to {email}.')
+                    return redirect('Verify_otp')  # Adjust redirection as needed
+                except Exception as e:
+                    messages.error(request, f'Failed to send email: {e}')
+            else:
+                messages.error(request, 'Invalid email address.')
         return HttpResponse('''<script>alert('Updated Successfully.');window.location="/DeliveryViewOrder"</script>''')
 
 

@@ -24,6 +24,7 @@ urlpatterns = [
     path('logout',Logout.as_view()),
     
     path('Registration', Registration.as_view(), name="Registration"),
+    path('ForgetPassword',ForgetPassword.as_view(),name="ForgetPassword"),
 
     # ///////////////////////////////// ADMIN ///////////////////////////////////////////
 
@@ -44,8 +45,9 @@ urlpatterns = [
     path('reject_deliveryService/<int:d_id>', reject_deliveryService.as_view(), name="reject_deliveryService"),
     path('AdminReviewRating', AdminReviewRating.as_view(), name="AdminReviewRating"),
     path('AdminReply/<int:id>', AdminReply.as_view(), name="AdminReply"),
-
-
+    path('VerifyTailor', VerifyTailor.as_view(), name="VerifyTailor"),
+    path('approveTailor/<int:t_id>', approveTailor.as_view(), name="approveTailor"),
+    path('rejectTailor/<int:t_id>', rejectTailor.as_view(), name="rejectTailor"),
 
     # ///////////////////////////////// DELIVERY Service ///////////////////////////////////////////
 
