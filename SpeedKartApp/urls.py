@@ -62,6 +62,7 @@ urlpatterns = [
     path('DeliveryViewOrder', DeliveryViewOrder.as_view(), name="DeliveryViewOrder"),
     path('DeliveryReply', DeliveryReply.as_view(),name="DeliveryReply"),
     path('DeliveryUserNotification' , DeliveryUserNotification.as_view(), name="DeliveryUserNotification"),
+    path('deliveryprofile', DeliveryProfile.as_view(), name="deliveryprofile"),
 
 #//////////////////////////////// SELLER ///////////////////////////////////////////
 

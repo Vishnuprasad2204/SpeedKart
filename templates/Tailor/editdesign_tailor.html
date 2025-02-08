@@ -13,10 +13,10 @@
     <form action="" class="CategoryCard" method="post" enctype="multipart/form-data">
       {% csrf_token %}
     <h1>Edit Designs!</h1>
-    <input type="text" placeholder="Design" name="Design_name" value="{{obj.Design_name}}" ><br>
+    <input type="text" placeholder="Design" name="Design_name" value="{{obj.Design_name}}" pattern="[A-Z a-z.]{3,25}"><br>
     <input type="file" placeholder="image" name="Design_image"><br>
     <img src="{{obj.Design_image.url}}" alt="design" height="100px" width="100px"><br>
-    <input type="text" placeholder="Price" name="Price" value="{{obj.Price}}" ><br>
+    <input type="number" placeholder="Price" name="Price" value="{{obj.Price}}" ><br>
     
     <button type="submit">Edit Design</button><br>
   </form></div>

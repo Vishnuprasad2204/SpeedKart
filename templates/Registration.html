@@ -19,11 +19,11 @@
             <option value="Tailor">Tailor </option>
             <option value="DeliveryAgent">DeliveryService</option>
         </select><br>
-        <input type="text" placeholder="Username" name="Name" required><br>
-        <input type="text" placeholder="Address" name="Address" required><br>
+        <input type="text" placeholder="Username" name="Name" required pattern="[A-Z a-z.]{3,25}"><br>
+        <input type="text" placeholder="Address" name="Address" required ><br>
         <input type="email" placeholder="email" name="Email" required><br>
-        <input type="tel" placeholder="Phone Number" name="Phone_no" required><br>
-        <input type="password" placeholder="password" name="password" required><br>
+        <input type="tel" placeholder="Phone Number" name="Phone_no" required pattern="[6789][0-9]{9}"><br>
+        <input type="password" placeholder="password" name="password"pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required><br>
         <p>Already Have an Account?<a href="/Login">Login Now</a></p>
         <button type="submit">REGISTER</button>
         </form>

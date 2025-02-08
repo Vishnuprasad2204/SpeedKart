@@ -89,68 +89,51 @@ class Registration(View):
 
     #//////////////////////////////////////FORGOT PASSWORD/////////////////////////////
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
+from django.views import View
+from django.contrib import messages
+from django.core.mail import send_mail
+from .models import Tailor_Table, Seller_Table, Delivery_Agent_Table, LoginTable_model
+
 class ForgetPassword(View):
     def get(self, request):
         return render(request, 'Forgotpassword.html')
+
     def post(self, request):
-        user = request.POST['Name']
-        email = request.POST['Email']
+        user_name = request.POST.get('Name')
+        email = request.POST.get('Email')
 
-        try:
-            obj = Tailor_Table.objects.get(Email=email, Name=user)
-            print("------obj1-------->obj")
-            login_obj = LoginTable_model.objects.get(id=obj.LOGIN_ID.id)
+        if not user_name or not email:
+            messages.error(request, "Both Name and Email are required.")
+            return redirect('/Forgotpassword')
+
+        # List of user tables to check
+        user_tables = [Tailor_Table, Seller_Table, Delivery_Agent_Table]
+
+        for table in user_tables:
             try:
+                user = table.objects.get(Email=email, Name=user_name)
+                login_obj = get_object_or_404(LoginTable_model, id=user.LOGIN_ID.id)
+
+                # Send email (Consider replacing this with a password reset link)
                 send_mail(
-                    'Password',  # Subject
-                    'Your Account Password is:',login_obj.password,  # Message
-                    'vishnuprasad2204@gmail.com',  # From email
-                    [email],  # Recipient list (should be a list)
+                    'Password Recovery',
+                    f'Your Account Password is: {login_obj.password}',
+                    'vishnuprasad2204@gmail.com',
+                    [email],
                 )
-                messages.success(request, f'Email sent to {email}.')
-                return HttpResponse('''<script> alert('mail sent Successfully');window.location="/Login" </script>''')
-            except Exception as e:
-                messages.error(request, f'Failed to send email: {e}')
-            return HttpResponse("User obj found")
 
-        except:
-            try:
-                obj1 = Seller_Table.objects.get(Email=email, Name=user)
-                print("------obj2-------->obj")
-                login_obj1 = LoginTable_model.objects.get(id=obj1.LOGIN_ID.id)
-                try:
-                    send_mail(
-                        'Password',  # Subject
-                        'Your Account Password is:',login_obj1.password,  # Message
-                        'vishnuprasad2204@gmail.com',  # From email
-                        [email],  # Recipient list (should be a list)
-                    )
-                    messages.success(request, f'Email sent to {email}.')
-                    return HttpResponse('''<script> alert('mail sent Successfully');window.location="/Login" </script>''')
-                except Exception as e:
-                    messages.error(request, f'Failed to send email: {e}')
-                    return HttpResponse('''<script> alert('error');window.location="/" </script>''')
+                messages.success(request, f'Password sent to {email}.')
+                return HttpResponse(
+                    '''<script>alert('Mail sent successfully'); window.location="/";</script>'''
+                )
 
+            except table.DoesNotExist:
+                continue  # Check the next table
 
-            except:
-                try:
-                    obj2 = Delivery_Agent_Table.objects.get(Email=email, Name=user)
-                    login_obj2 = LoginTable_model.objects.get(id=obj2.LOGIN_ID.id)
-                    try:
-                        send_mail(
-                            'Password',  # Subject
-                            'Your Account Password is:',login_obj2.password,  # Message
-                            'vishnuprasad2204@gmail.com',  # From email
-                            [email],  # Recipient list (should be a list)
-                        )
-                        messages.success(request, f'Email sent to {email}.')
-                        return HttpResponse('''<script> alert('mail sent Successfully');window.location="/Login" </script>''')
-                    except Exception as e:
-                        messages.error(request, f'Failed to send email: {e}')
-
-                except:
-                        return HttpResponse('''<script> alert('email not valid');window.location="/" </script>''')
-
+        messages.error(request, "Invalid Email or Name. Please try again.")
+        return HttpResponse('''<script>alert('Email not found'); window.location="/"</script>''')
                     
     
     # ///////////////////////////////////// ADMIN/////////////////////////////////////
@@ -577,6 +560,17 @@ class DeliveryReply(View):
     def get(self, request):
         return render(request, 'DeliveryService/DeliveryReply.html')
     
+
+class DeliveryProfile(View):
+    def get(self, request):
+        obj=Delivery_Agent_Table.objects.get(LOGIN_ID_id=request.session['login_id'])
+        return render(request, 'DeliveryService/manageprofile_delivery.html', {'obj': obj})
+    def post(self, request):
+        obj=Delivery_Agent_Table.objects.get(LOGIN_ID_id=request.session['login_id'])
+        obj=DeliveryProfile_form(request.POST, instance=obj)
+        if obj.is_valid():
+            obj.save()
+            return HttpResponse('''<script>alert('updated successfully');window.location="/deliveryprofile"</script>''')   
 
 
 

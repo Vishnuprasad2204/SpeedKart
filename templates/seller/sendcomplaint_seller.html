@@ -11,7 +11,7 @@
 <body class="test"><form action="" method="post" class="regcard">
     {% csrf_token %}
     <h1>Send Complaint</h1>
-    <input type="text" name="SELLER_ID" value="{{obj.id}}">
+    <input type="text" name="SELLER_ID" value="{{obj.id}}" disabled>
     <input type="text" name="Complaint" placeholder="Complaint">
     <button type="submit">Send</button>
 </form>

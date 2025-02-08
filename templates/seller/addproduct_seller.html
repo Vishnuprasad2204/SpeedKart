@@ -13,10 +13,10 @@
     <form action="" class="CategoryCard" method="post" enctype="multipart/form-data">
       {% csrf_token %}
     <h1>Add Products!</h1>
-    <input type="text" placeholder="Product" name="Product_name" required><br>
+    <input type="text" placeholder="Product" name="Product_name" required pattern="[A-Z a-z.]{3,25}" ><br>
     <input type="file" placeholder="image" name="Product_image" required><br>
     <input type="text" placeholder="Description" name="Description" required><br>
-    <input type="number" placeholder="Price" name="Price" required><br>
+    <input type="number" placeholder="Price" name="Price" required  ><br>
     <input type="number" placeholder="Quantity" name="Quantity" required><br>
     <select>
       {% for i in obj %}

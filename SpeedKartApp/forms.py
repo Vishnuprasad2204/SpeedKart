@@ -75,4 +75,7 @@ class Notification_form(ModelForm):
         model = Notification_Table
         fields = ['orderdata','Notification']
 
-
+class DeliveryProfile_form(ModelForm):
+    class Meta:
+        model = Delivery_Agent_Table
+        fields = ['Name', 'Address', 'Phone_no', 'Email']

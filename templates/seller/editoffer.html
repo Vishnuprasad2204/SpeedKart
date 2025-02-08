@@ -20,7 +20,7 @@
       {%endfor %}
     </select>
     <input type="text" placeholder="Details" name="Offer_details" value="{{o.Offer_details}}" required><br>
-    <input type="text" placeholder="Discount" name="discount" value="{{o.discount}}" required><br>
+    <input type="text" placeholder="Discount" name="discount" value="{{o.discount}}" required pattern="[0-9]"><br>
     <button type="submit">Edit Offer</button><br>
   </form></div>
 </body>
