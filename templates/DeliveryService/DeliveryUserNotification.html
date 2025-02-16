@@ -19,7 +19,7 @@
             <option value="" disabled selected>Choose an order</option>
             {% for i in val %}
             <option value="{{ i.id }}">
-                Order ID: {{ i.Order.id }} - {{ i.Order.Order_details }}
+                Order ID:{{ i.Order.order.id }}
             </option>
             {% endfor %}
         </select>

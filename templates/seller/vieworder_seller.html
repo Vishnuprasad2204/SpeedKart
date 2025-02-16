@@ -26,16 +26,16 @@
         <th></th>
         {% for i in obj %}
        <tr>
-        <td>{{ i.PRODUCT_ID.Product_name}}</td>
-        <td><img src="{{i.PRODUCT_ID.Product_image.url}}" alt="" height="100px" width="100px"></td>
-        <td>{{ i.User.Name }}</td>
-        <td>{{ i.User.Email }}</td>
-        <td>{{ i.User.Phone_no }}</td>
-        <td>{{ i.User.Address }}</td>
-        <td>{{ i.Quantity }}</td>
-        <td>{{ i.PRODUCT_ID.Price }}$</td>
-        <td>{{ i.PRODUCT_ID.Description }}</td>
-        <td>{{ i.Order_Status }}</td>
+        <td>{{ i.product.Product_name}}</td>
+        <td><img src="{{i.product.Product_image.url}}" alt="" height="100px" width="100px"></td>
+        <td>{{ i.order.user.Name }}</td>
+        <td>{{ i.order.user.Email }}</td>
+        <td>{{ i.order.user.Phone_no }}</td>
+        <td>{{ i.order.user.Address }}</td>
+        <td>{{ i.quantity }}</td>
+        <td>{{ i.product.Price }}$</td>
+        <td>{{ i.product.Description }}</td>
+        <td>{{ i.status }}</td>
        <div class="asign">
         <td>
             <a href="/assigndeliveryseller/{{i.id}}">Assign</a>

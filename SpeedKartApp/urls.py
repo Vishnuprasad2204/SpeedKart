@@ -104,6 +104,29 @@ urlpatterns = [
     path('editdes/<int:pk>', EditDesign.as_view(), name="editdes"),
     path('Accept_Request/<int:r_id>', Accept_Request.as_view(), name="Accept_Request"),
     path('Reject_Request/<int:r_id>', Reject_Request.as_view(), name="Reject_Request"),
-    
 
+
+
+
+#/////////////////////////////////////API/////////////////////////////////////////////
+
+
+    path('LoginPage', LoginPage.as_view(), name="LoginPage"),   
+    path('UserReg', UserReg.as_view(), name="UserReg"),   
+    path('ViewProfileApi/<int:lid>', ViewProfileApi.as_view(), name="ViewProfileApi"),   
+    path('ViewShopApi', ViewShopApi.as_view(), name="ViewShopApi"),   
+    path('ViewCategoryApi', ViewCategoryApi.as_view(), name="ViewCategoryApi"),   
+    path('ShopProductApi/<int:s_id>', ShopProductApi.as_view(), name="ShopProductApi"),   
+    path('ViewProductApi', ViewProductApi.as_view(), name="ViewProductApi"),   
+    path('AddToCartApi/<int:lid>', AddToCartApi.as_view(), name="AddToCartApi"),
+    path('OrderApi/<int:lid>', OrderApi.as_view(), name="OrderApi"),   
+    path('OrderHistoryApi/<int:lid>', OrderHistoryApi.as_view(), name="OrderHistoryApi"),   
+    path('ViewComplaintApi/<int:lid>', ComplaintApi.as_view(), name="ComplaintApi"),   
+    path('ViewReview/<int:productid>', ViewReview.as_view(), name="ViewReview"),   
+    path('ReturnNotificationApi/<int:lid>', ReturnNotificationApi.as_view(), name="ReturnNotificationApi"),   
+    path('AcceptReturnApi', AcceptReturnApi.as_view(), name="AcceptReturnApi"),   
+    path('RejectReturnApi', RejectReturnApi.as_view(), name="RejectReturnApi"),   
+    path('ViewDesignApi', ViewDesignApi.as_view(), name="ViewDesignApi"),   
+    path('SendRequestDesignApi/<int:lid>', SendRequestDesignApi.as_view(), name="SendRequestDesignApi"),   
+    path('DetectApi', DetectApi.as_view(), name="DetectApi"),   
 ]

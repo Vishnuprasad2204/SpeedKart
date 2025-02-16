@@ -1,7 +1,10 @@
+import datetime
 import random
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.views import View
+
+from SpeedKartApp.serializer import *
 
 from .forms import *
 from SpeedKartApp.models import *
@@ -49,7 +52,8 @@ from django.contrib import messages
 
 class Registration(View):
     def get(self, request):
-        return render(request, 'Registration.html')
+        return redirect('DetectApi')
+        # return render(request, 'Registration.html')
     def post(self, request):
         type = request.POST['type']
 
@@ -416,7 +420,6 @@ class DeliveryUserNotification(View):
         # Ensure session contains 'login_id'
         if 'login_id' not in request.session:
             return HttpResponse('''<script>alert('Session expired. Please log in again.');window.location="/login"</script>''')
-
         id = request.session['login_id']
         try:
             # Fetch the logged-in delivery agent
@@ -456,7 +459,8 @@ class DeliveryUserNotification(View):
 class DeliveryNotification(View):
     def get(self, request):
         # Fetch all notifications from the Notification_Table
-        notifications = Notification_Table.objects.select_related('orderdata', 'ASSIGN').all()
+        notifications = Notification_Table.objects.filter(ASSIGN__delivery_agent__LOGIN_ID=request.session['login_id'])
+        print("^^^^^^^^^^^^^^^", notifications)
         return render(request, 'DeliveryService/DeliverySentNotification.html', {'notifications': notifications})
 
 from django.core.mail import send_mail
@@ -470,7 +474,7 @@ class DeliveryUpdateOrder(View):
 
     def post(self, request, a_id):
         obj = Assign_Table.objects.get(id=a_id)
-        obj1 = Order_Table.objects.get(id=obj.Order.id)
+        obj1 = orderitem.objects.get(id=obj.Order.id)
         status1 = request.POST['status']
         print(status1,"fffffffffffff")
         obj1.Order_Status = status1
@@ -582,14 +586,14 @@ class SellerDelivery(View):
     def get(self, request, o_id):
         request.session['o_id']=o_id
         obj = Delivery_Agent_Table.objects.all()
-        obj1 = Order_Table.objects.get(id=o_id)
+        obj1 = orderitem.objects.get(id=o_id)
         return render(request, 'seller/assigndelivery_seller.html', {'obj': obj, 'obj1' :obj1})
 
 class AssignDelivery(View):
     def post(self, request):
         form=Assign_Tableform(request.POST)
         if form.is_valid():
-            obj1 = Order_Table.objects.get(id=request.session['o_id'])
+            obj1 = orderitem.objects.get(id=request.session['o_id'])
             obj1.Order_Status="assigned"
             obj1.save()
             form.save()
@@ -612,7 +616,7 @@ class Deleteoffer(View):
     def get(self, request,pk):
         c = Offer_Table.objects.get(pk=pk)
         c.delete()
-        return HttpResponse('''<script>alert('deleted successfully');window.location="/selleroffer"</script>''')
+        return HttpResponse('''<script>alert('deleted successfully');window.location="/sellerproduct"</script>''')
 
 class Editoffer(View):
     def get(self,request,pk):
@@ -624,7 +628,7 @@ class Editoffer(View):
         d=AddOffer_form(request.POST, instance=c)
         if d.is_valid():
             d.save()
-            return HttpResponse('''<script>alert("updated successfullyy");window.location='/selleroffer'</script>''')
+            return HttpResponse('''<script>alert("updated successfullyy");window.location='/sellerproduct'</script>''')
 
 
 class SellerAddOffer(View):
@@ -648,7 +652,7 @@ class SellerProduct(View):
     
 class ViewOffer(View):
     def get(self, request, pk):
-        c = Offer_Table.objects.get(pk=pk)
+        c = Offer_Table.objects.get(PRODUCT_ID__id=pk)
         return render(request, 'seller/viewOffer.html', {'obj': c})
     
 class SellerAddProduct(View):
@@ -657,9 +661,15 @@ class SellerAddProduct(View):
         return render(request, 'seller/addproduct_seller.html',{'obj':obj})
     def post(self, request):
         c=Product_form(request.POST, request.FILES)
+        seller = Seller_Table.objects.get(LOGIN_ID__id=request.session['login_id'])
+        print('-------',seller)
         if c.is_valid():
-            c.save()
+            f= c.save(commit=False)
+            f.SELLER_ID=seller
+            f.save()
             return HttpResponse('''<script>window.location="/sellerproduct"</script>''')
+        else:
+            return HttpResponse('''<script>alert("invalid form");window.location="/sellerproduct"</script>''')
 
 class DeleteProduct(View):
     def get(self, request, pk):
@@ -752,8 +762,9 @@ class sellercompdash(View):
     
 class SellerOrder(View):
     def get(self, request):
-        obj=Order_Table.objects.filter(PRODUCT_ID__SELLER_ID__LOGIN_ID_id=request.session['login_id'])
-        print(request.session['login_id'])
+        obj=orderitem.objects.filter(product__SELLER_ID__LOGIN_ID_id=request.session['login_id'], status='order')
+        print('------------>',request.session['login_id'])
+        print('----------->',obj)
         return render(request, 'seller/vieworder_seller.html', {'obj': obj})
     
 class SellerOtp(View):
@@ -849,6 +860,368 @@ class Reject_Request(View):
         return HttpResponse('''<script> alert('Rejected Successfully');window.location="/TailorRequestAssign" </script>''')
 
 
+# ////////////////////////////////////////// API /////////////////////////////////////////////
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework import status
+from rest_framework.status import *
+
+class UserReg(APIView):
+    def post(self, request):
+        print("#########",request.data)
+        user_serial = UserSerializer(data=request.data)
+        login_serial = LoginSerializer(data=request.data)
+        data_valid = user_serial.is_valid()
+        login_valid = login_serial.is_valid()
+
+        if data_valid and login_valid:
+            print("&&&&&&&&&&&&&&&")
+            password = request.data['password']
+            login_profile = login_serial.save(type='USER',password=password)
+            user_serial.save(LOGIN_ID=login_profile)
+            return Response(user_serial.data, status=status.HTTP_201_CREATED)
+        return Response({'login_error':login_serial.errors if not login_valid else None,
+                         'user_error':user_serial.errors if not data_valid else None}, status=status.HTTP_400_BAD_REQUEST)
+
+class LoginPage(APIView):
+    def post(self, request):
+        print("---------------->")
+        response_dict = {}
+        print("------------>", request.data)
+      # Get data from the request
+        username = request.data.get("username")
+        password = request.data.get("password")
+        # Validate input
+        if not username or not password:
+            response_dict["message"] = "failed"
+            return Response(response_dict, status=HTTP_400_BAD_REQUEST)
+        # Fetch the user from LoginTable
+        t_user = LoginTable_model.objects.filter(username=username,password=password).first()
+        if not t_user:
+            response_dict["message"] = "failed"
+            return Response(response_dict, status=HTTP_401_UNAUTHORIZED)
+        # # Check password using check_password
+        # if not check_password(password, t_user.password):
+        #     response_dict["message"] = "failed"
+        #     return Response(response_dict, status=HTTP_401_UNAUTHORIZED)
+
+        # Successful login response
+        response_dict["message"] = "success"
+        response_dict["login_id"] = t_user.id
+
+        return Response(response_dict, status=HTTP_200_OK)
+
+
+class ViewProfileApi(APIView):
+    def get(self, request, lid):
+        obj = UserTable_model.objects.filter(LOGIN_ID_id=lid)
+        serializer = UserSerializer(obj, many=True)
     
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, lid):
+        obj = get_object_or_404(UserTable_model, LOGIN_ID_id=lid)
+        user_serial = UserSerializer(obj, data=request.data, partial=True)  # Enable partial updates
+
+        if user_serial.is_valid():
+            user_serial.save()
+            return Response(user_serial.data, status=status.HTTP_200_OK)
+        
+        return Response(user_serial.errors, status=status.HTTP_400_BAD_REQUEST)
+ 
+class ViewShopApi(APIView):
+    def get(self, request):
+        seller = Seller_Table.objects.all()
+        seller_serializer = SellerSerializer(seller, many=True)
+        return Response(seller_serializer.data)
+ 
+class ViewProductApi(APIView):
+    def get(self, request):
+        product = Product_Table.objects.all()
+        product_serializer = ProductSerializer(product, many=True)
+        return Response(product_serializer.data)
+ 
+class ShopProductApi(APIView):
+    def get(self, request, s_id):
+        products = Product_Table.objects.filter(SELLER_ID_id=s_id)
+        product_data = []
+        for product in products:
+            offer = Offer_Table.objects.filter(PRODUCT_ID=product).first()  # Get the first offer if available
+            product_info = {
+                "id": product.id,
+                "Product_name": product.Product_name,
+                "Product_image": product.Product_image.url if product.Product_image else None,
+                "Description": product.Description,
+                "Price": product.Price,
+                "Quantity": product.Quantity,
+                "Offer": {
+                    "Offer_name": offer.Offer_name if offer else None,
+                    "Offer_details": offer.Offer_details if offer else None,
+                    "Discount": offer.discount if offer else None,
+                } if offer else None,
+            } 
+            product_data.append(product_info)
+        return Response(product_data)
+  
+class ViewCategoryApi(APIView):
+    def get(self, request):
+        obj = Category_Table.objects.all() 
+        obj_serializer = CategorySerializer(obj, many=True)
+        print('----->', obj_serializer.data)
+        return Response(obj_serializer.data, status=status.HTTP_200_OK)
+ 
+class AddToCartApi(APIView):
+    def get(self, request, lid):
+        order_details = orderitem.objects.filter(order__user__LOGIN_ID_id=lid, status='cart')
+        order_serializer = OrderSerializer(order_details, many=True)
+        print('--------->', order_serializer.data)
+        return Response(order_serializer.data)
+    def post(self, request, lid):
+        qty = request.data.get('quantity')
+        pro_id = request.data.get('product_id')
+        ob = Product_Table.objects.get(id=pro_id)
+        tt = int(ob.Price) * int(qty)
+        stock = ob.Quantity
+        nstk = int(stock) - int(qty)
+        if stock >= int(qty):
+            up = Product_Table.objects.get(id=pro_id)
+            up.Quantity = nstk
+            up.save()
+            q = order.objects.filter(user__LOGIN_ID__id=lid)
+            if len(q) == 0:
+                obe = order()
+                obe.totalamount = tt
+                obe.status = 'cart'
+                obe.date = datetime.datetime.now().strftime("%Y-%m-%d")
+                obe.user = UserTable_model.objects.get(LOGIN_ID__id=lid)
+                obe.save()
+                obe1 = orderitem()
+                obe1.quantity = qty
+                obe1.order = obe
+                obe1.status = 'cart'
+                obe1.product = up
+                obe1.save()
+                return Response(status=status.HTTP_200_OK)
+            else:
+                total = int(ob.Price) + int(tt)
+                print(total, "KKKKKKKKKKKKKKKK")
+                obr = order.objects.get(id=q[0].id)
+                obr.totalamount= total
+                obr.status = 'cart'
+                obr.save()
+                obr1 = orderitem()
+                obr1.quantity = qty
+                obr1.order = obr
+                obr1.status = 'cart'
+                obr1.product = up
+                obr1.save()
+                return Response(status=status.HTTP_200_OK)
+        else:
+            data = {"task": "out of stock"}
+            return Response(data, status=status.HTTP_200_OK)
     
+class OrderHistoryApi(APIView):
+    def get(self, request, lid):
+        order = orderitem.objects.filter(order__user__LOGIN_ID_id=lid, status='delivered')
+        order_serializer = OrderSerializer(order, many=True)
+        return Response(order_serializer.data, status=status.HTTP_200_OK)
+class OrderApi(APIView):
+    def get(self, request, lid):
+        order = orderitem.objects.filter(order__user__LOGIN_ID_id=lid, status='order')
+        order_serializer = OrderSerializer(order, many=True)
+        return Response(order_serializer.data, status=status.HTTP_200_OK)
+    def post(self, request, lid):
+        item_id = request.data.get('id')
+        print('------------>', request.data)
+        obj = orderitem.objects.get(id=item_id)
+        obj.status='order'
+        obj.save()
+        return Response(status=status.HTTP_200_OK)
+
+class ComplaintApi(APIView):  # Class names should typically be in CamelCase
+    def get(self, request, lid):
+        try:
+            # Fetch complaints related to the provided login_id (lid)
+            valu = Complaints_Reply_Table.objects.filter(USER_ID__LOGIN_ID_id=lid)
+            print("vallllllllll", valu)
+            # Check if there are any complaints
+            if not valu.exists():
+                return Response({"detail": "No complaint and reply."}, status=status.HTTP_204_NO_CONTENT)
+            # Serialize the queryset with many=True to handle multiple objects
+            complaints = Complaintserializer1(valu, many=True)
+            print("cccccc", complaints.data)
+            # Return the serialized data
+            return Response(complaints.data, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            # In case of any error, return a 500 Internal Server Error with the error message
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
+    def post(self, request, lid):
+        try:
+            complaint = request.data.get('complaint')
+            obj = Complaints_Reply_Table()
+            obj.USER_ID = UserTable_model.objects.get(LOGIN_ID_id=lid)
+            obj.Complaint = complaint
+            obj.Reply='pending'
+            obj.save()
+            return Response(status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class ViewReview(APIView):
+    def get(self, request, productid):
+        product_id=productid
+        review = Productrate_Table.objects.filter(PRODUCT_ID_id=product_id)
+        review_serializer = ReviewSerializer(review, many=True)
+        print('----------->', review_serializer.data)
+        return Response(review_serializer.data)
+    def post(self, request, productid):
+        product_id=productid
+        lid=request.data.get('lid')
+        rating=request.data.get('rating')
+        review=request.data.get('review')
+        complaint=request.data.get('complaint')
+        
+        obj = Productrate_Table()   
+        obj.USER_ID = UserTable_model.objects.get(LOGIN_ID_id=lid)
+        obj.PRODUCT_ID = Product_Table.objects.get(id=product_id)
+        obj.Ratings = rating
+        obj.Review = review
+        obj.Complaint= complaint
+        obj.Reply ="pending"
+        obj.save()
+        return Response(status=status.HTTP_200_OK)
+        
+
+class ReturnNotificationApi(APIView):
+    def get(self, request, lid):
+        try:
+            return_notification = Notification_Table.objects.filter(orderdata__order__user__LOGIN_ID_id=lid, status="pending")
+            return_notification_serializer = ReturnNotificationSerializer(return_notification, many=True)
+            print(return_notification_serializer.data)
+            return Response(return_notification_serializer.data)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
+        
+class AcceptReturnApi(APIView):        
+    def post(self, request):
+        try:
+            item_id = request.data.get('id')
+            return_notification = Notification_Table.objects.get(id=item_id)
+            return_notification.status = 'accept'
+            return_notification.save()
+            return Response(status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class RejectReturnApi(APIView):        
+    def post(self, request):
+        try:
+            item_id = request.data.get('id')
+            return_notification = Notification_Table.objects.get(id=item_id)
+            return_notification.status = 'reject'
+            return_notification.save()
+            return Response(status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class ViewDesignApi(APIView):
+    def get(self, request):
+        design = Design_Table.objects.all()
+        design_serializer = DesignSerializer(design, many=True)
+        return Response(design_serializer.data)
+    def post(self, request):
+        try:
+            lid = request.data.get('lid')
+            d_id = request.data.get('d_id')
+            Measurements = request.data.get('Measurements')
+            Quantity = request.data.get('Quantity')
+            lid = request.data.get('lid')
+            obj = Request_Table()
+            obj.USER_ID = UserTable_model.objects.get(LOGIN_ID_id=lid)
+            obj.Design = Design_Table.objects.get(id=d_id)
+            obj.Measurements = Measurements
+            obj.Quantity = Quantity
+            obj.Request_status = 'pending'
+            obj.save()
+            return Response(status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class SendRequestDesignApi(APIView):
+    def post(self, request, lid):
+        Design_id = request.data.get('Design_id')
+        Measurements = request.data.get('Measurements')
+        Quantity = request.data.get('Quantity')
+        obj = Request_Table()
+        obj.USER_ID = UserTable_model.objects.get(LOGIN_ID_id=lid)
+        obj.Design = Design_Table.objects.get(id=Design_id)
+        obj.Measurements = Measurements
+        obj.Quantity = Quantity
+        obj.Request_status = 'pending'
+        obj.save()
+        return Response(status=status.HTTP_200_OK)
+
+
+
+
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.views import APIView
+import numpy as np
+import cv2
+from ultralytics import YOLO
+
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.views import APIView
+import numpy as np
+import cv2
+from ultralytics import YOLO
+
+class DetectApi(APIView):
+    def post(self, request):
+        data_list = []
+
+        # Load the model
+        model = YOLO("D:/Sk/SpeedKart/last.pt")
+
+        # Get the uploaded image
+        file_obj = request.FILES.get('image')
+        if not file_obj:
+            return Response({"error": "No image provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Convert the image file to a NumPy array
+        image_bytes = file_obj.read()
+        image_array = np.asarray(bytearray(image_bytes), dtype=np.uint8)
+        image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
+
+        # Check if the image was loaded properly
+        if image is None:
+            return Response({"error": "Invalid image file"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Perform object detection
+        results = model.predict(image)
+
+        # Check if results contain valid detections
+        if results:
+            first_result = results[0]  # Get the first result
+            if hasattr(first_result, "boxes") and first_result.boxes is not None:
+                for result in first_result.boxes.data.tolist():
+                    x1, y1, x2, y2, score, class_id = result
+                    if score > 0.5:
+                        cv2.rectangle(image, (int(x1), int(y1)), (int(x2), int(y2)), (0, 255, 0), 4)
+                        cv2.putText(image, first_result.names[int(class_id)].upper(), (int(x1), int(y1 - 10)),
+                                    cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 255, 0), 3, cv2.LINE_AA)
+                        data_list.append(first_result.names[int(class_id)])
+        print("------------------->", data_list)
+        p_list = []
+        for i in data_list:
+            print("-----",i)
+        product_obj = Product_Table.objects.filter(CATEGORY__Category_name__in=data_list)
+        print('-----product obj---->', product_obj)    
+        product_serializer = ProductSerializer(product_obj, many=True)
+        print('-----serial---->', product_serializer.data)
+        return Response(product_serializer.data, status=status.HTTP_200_OK)

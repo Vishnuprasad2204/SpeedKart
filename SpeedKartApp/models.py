@@ -20,8 +20,6 @@ class Seller_Table(models.Model):
     Phone_no = models.IntegerField(null= True, blank= True)
     Email = models.CharField(max_length=100, null=True, blank=True)
 
-
-
 # review to app -user to admin
 class Review_Table(models.Model):
     USER_ID = models.ForeignKey(UserTable_model, on_delete=models.CASCADE, null=True, blank=True)
@@ -54,8 +52,6 @@ class Category_Table(models.Model):
     Description =  models.CharField(max_length= 100, null= True, blank= True)
     created_at = models.DateField(auto_now_add= True, null=True, blank=True)
     updated_at = models.DateField(auto_now= True, null=True, blank=True)
-
-
 
 class Product_Table(models.Model):
     SELLER_ID = models.ForeignKey(Seller_Table, on_delete=models.CASCADE, null=True, blank=True)
@@ -100,7 +96,6 @@ class Design_Table(models.Model):
 
 
 class Request_Table(models.Model):
-    TAILOR_ID = models.ForeignKey(Tailor_Table, on_delete=models.CASCADE, null=True, blank=True)
     USER_ID = models.ForeignKey(UserTable_model, on_delete=models.CASCADE, null=True, blank=True)
     Design = models.ForeignKey(Design_Table,on_delete=models.CASCADE, null=True, blank=True)
     Measurements = models.CharField(max_length=100, null= True, blank= True)
@@ -117,16 +112,36 @@ class Offer_Table(models.Model):
     Offer_details = models.CharField(max_length=100, null=True, blank=True)
     discount = models.IntegerField(null=True, blank=True)
 
-class Order_Table(models.Model):
-    #created_at = models.DateField(auto_now_add= True)
-    #updated_at = models.DateField(auto_now= True)
-    Date_Time = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    Order_details = models.CharField(max_length=100, null=True, blank=True)
-    PRODUCT_ID = models.ForeignKey(Product_Table,on_delete=models.CASCADE, null= True, blank= True)
-    User = models.ForeignKey(UserTable_model, on_delete=models.CASCADE, null=True, blank=True)
-    Quantity = models.IntegerField(null= True, blank= True)
-    Order_Status = models.CharField(max_length=100, null=True, blank=True)
+# class Order_Table(models.Model):
+#     #created_at = models.DateField(auto_now_add= True)
+#     date = models.DateField()
+#     Date_Time = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+#     Order_details = models.CharField(max_length=100, null=True, blank=True)
+#     PRODUCT_ID = models.ForeignKey(Product_Table,on_delete=models.CASCADE, null= True, blank= True)
+#     User = models.ForeignKey(UserTable_model, on_delete=models.CASCADE, null=True, blank=True)
+#     Quantity = models.IntegerField(null= True, blank= True)
+#     Order_Status = models.CharField(max_length=100, null=True, blank=True)
+#     totalamount = models.CharField(max_length=100, null=True, blank=True)
 
+# class orderitem(models.Model):
+#     order = models.ForeignKey(Order_Table, on_delete=models.CASCADE)
+#     product=models.ForeignKey(Product_Table, on_delete=models.CASCADE)
+#     quantity=models.CharField(max_length=100)
+#     status = models.CharField(max_length=100)
+
+
+class order(models.Model):
+    user=models.ForeignKey(UserTable_model, on_delete=models.CASCADE)
+    totalamount=models.FloatField()
+    date = models.DateField()
+    status=models.CharField(max_length=100)
+
+
+class orderitem(models.Model):
+    order = models.ForeignKey(order, on_delete=models.CASCADE)
+    product=models.ForeignKey(Product_Table, on_delete=models.CASCADE)
+    quantity=models.CharField(max_length=100)
+    status = models.CharField(max_length=100)
 
 class Cart_Table(models.Model):
     User_id = models.ForeignKey(LoginTable_model, on_delete=models.CASCADE, null=True, blank=True)
@@ -140,14 +155,14 @@ class Payment_Table(models.Model):
     
 class Assign_Table(models.Model):
     delivery_agent = models.ForeignKey(Delivery_Agent_Table, on_delete= models.CASCADE, null=True, blank=True)
-    Order = models.ForeignKey(Order_Table,on_delete= models.CASCADE, null= True, blank= True)
+    Order = models.ForeignKey(orderitem,on_delete= models.CASCADE, null= True, blank= True)
     Order_Status = models.CharField(max_length=100, null=True, blank=True)
     Created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now= True, null=True, blank=True)
 
 class Notification_Table(models.Model):
     ASSIGN = models.ForeignKey(Assign_Table,  on_delete= models.CASCADE, null= True, blank= True) 
-    orderdata = models.ForeignKey(Order_Table,  on_delete= models.CASCADE, null= True, blank= True) 
+    orderdata = models.ForeignKey(orderitem,  on_delete= models.CASCADE, null= True, blank= True) 
     Created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now= True, null=True, blank=True)
     Notification = models.CharField(max_length=100, null=True, blank=True)

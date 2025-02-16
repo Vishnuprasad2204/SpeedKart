@@ -10,14 +10,16 @@
 
 </head>
 <body class="test">
-    <form action="" class="CategoryCard">
+    <form method="post" action="/editoffer/{{ obj.id }}" class="CategoryCard">
     <h1>View Offer!</h1>
    
     <input type="text" value="{{obj.PRODUCT_ID.Product_name}}" disabled>
-    <input type="text" placeholder="Name" name="Offer_name" value="{{obj.Offer_name}}" readonly><br>
+    <input type="text" placeholder="Name" name="Offer_name" value="{{obj.Offer_name}}"><br>
     <img src="{{obj.PRODUCT_ID.Product_image.url}}" alt="jaba" height="100px" width="100px"><br>
-    <input type="text" value="{{obj.Offer_details}}" placeholder="Details" name="Offer_details" readonly><br>
-    <input type="text" value="{{obj.discount}}" placeholder="Discount" name="discount" readonly><br>
+    <input type="text" value="{{obj.Offer_details}}" placeholder="Details" name="Offer_details"><br>
+    <input type="text" value="{{obj.discount}}" placeholder="Discount" name="discount"><br>
+    <input type="submit" value="save">
+    <a href="/deleteoff/{{obj.id}}">delete</a>
   </form></div>
 </body>
 </html>
